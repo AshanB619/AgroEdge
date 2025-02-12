@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Cookies from 'universal-cookie';
-import axios from 'axios';
+// import React, { useState } from 'react';
+// import Cookies from 'universal-cookie';
+// import axios from 'axios';
 
 // import signinImage from '../assets/signup.jpg';
 
@@ -12,7 +12,6 @@ import axios from 'axios';
 //     password: '',
 //     confirmPassword: '',
 //     phoneNumber: '',
-//     avatarURL: '',
 // }
 
 // const Auth = () => {
@@ -23,18 +22,21 @@ import axios from 'axios';
 //         setForm({ ...form, [e.target.name]: e.target.value });
 //     }
 
+//     //passing input form data to the backend (auth file)
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 
-//         const { username, password, phoneNumber, avatarURL } = form;
+//         const { username, password, phoneNumber } = form;  //coming from form
 
 //         const URL = 'https://localhost:5000/auth';
-//         // const URL = 'https://medical-pager.herokuapp.com/auth';
+//         // const URL = 'https://medical-pager.herokuapp.com/auth';  
 
+//         //make that request to the backend
 //         const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
-//             username, password, fullName: form.fullName, phoneNumber, avatarURL,
+//             username, password, fullName: form.fullName, phoneNumber,
 //         });
 
+//         //store everything into cookies
 //         cookies.set('token', token);
 //         cookies.set('username', username);
 //         cookies.set('fullName', fullName);
@@ -42,11 +44,10 @@ import axios from 'axios';
 
 //         if(isSignup) {
 //             cookies.set('phoneNumber', phoneNumber);
-//             cookies.set('avatarURL', avatarURL);
 //             cookies.set('hashedPassword', hashedPassword);
 //         }
 
-//         window.location.reload();
+//         window.location.reload();   //after getting inputs reload the page
 //     }
 
 //     const switchMode = () => {
@@ -93,7 +94,7 @@ import axios from 'axios';
 //                                 />
 //                             </div>
 //                         )}
-//                         {isSignup && (
+//                         {/* {isSignup && (
 //                             <div className="auth__form-container_fields-content_input">
 //                                 <label htmlFor="avatarURL">Avatar URL</label>
 //                                 <input 
@@ -104,7 +105,7 @@ import axios from 'axios';
 //                                     required
 //                                 />
 //                             </div>
-//                         )}
+//                         )} */}
 //                         <div className="auth__form-container_fields-content_input">
 //                                 <label htmlFor="password">Password</label>
 //                                 <input 
