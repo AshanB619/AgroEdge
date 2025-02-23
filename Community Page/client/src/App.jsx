@@ -5,7 +5,9 @@ import Cookies from 'universal-cookie'; //import three dependencies
 
 import { ChannelListContainer, ChannelContainer } from './components';
 
-//import 'stream-chat-react/dist/css/v2/index.css';  //pre-build css
+//import 'stream-chat-react/dist/css/index.css'; // Legacy styles
+import 'stream-chat-react/dist/css/v2/index.css'; // New styles
+
 import './App.css';
 
 //const cookies = new Cookies();
@@ -31,7 +33,7 @@ const App = () =>{
     const [isCreating, setIsCreating] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-   // if(!authToken) return <Auth />
+ //   if(!authToken) return <Auth />
 
     return(
         <div className="app__wrapper">
