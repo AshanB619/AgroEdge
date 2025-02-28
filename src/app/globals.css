@@ -8,21 +8,21 @@
   font-family: 'Poppins', sans-serif;
 }
 
-:root {
+/* Default Light Theme */
+:root, [data-theme='light'] {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark Theme */
+[data-theme='dark'] {
+  --background: #171717;
+  --foreground: #f0f0f0;
 }
 
+/* Apply to Body */
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Poppins', sans-serif;
 }
-
