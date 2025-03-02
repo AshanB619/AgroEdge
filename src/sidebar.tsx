@@ -1,7 +1,7 @@
 "use client";
 
 import { Home, Settings, User, HelpCircle, Lock, Users, CloudMoon, FileText, BellRing, MessageSquare } from "lucide-react";
-import { GlowingEffect } from "../src/components/ui/glowing-effect";
+import { GlowingEffect } from "./components/ui/glowing-effect";
 import { useEffect } from "react";
 
 export default function GlowingEffectDemo() {
