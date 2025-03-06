@@ -1,2 +1,4 @@
+# Ignore node_modules and .next folder
 node_modules/
 .next/
+
