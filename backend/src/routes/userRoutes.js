@@ -1,5 +1,5 @@
 import express from "express";
-import { registerFarmer, loginFarmer, updateFarmerProfile, deleteFarmerProfile } from "../controllers/userController.js"
+import { registerFarmer, loginFarmer, updateFarmerProfile, deleteFarmerProfile, getAllFarmers } from "../controllers/userController.js"
 const router = express.Router();
 
 router.post("/register", registerFarmer);

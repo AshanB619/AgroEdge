@@ -101,7 +101,7 @@ const deleteFarmerProfile = asyncHandler(async (req,res) => {
     res.status(200).json({ message: "Farmer deleted successfully", deletedFarmer });
 })
 
-import asyncHandler from "express-async-handler";
+
 import { getAllFarmersService } from "../models/userModels.js";
 
 // Get all farmers

@@ -44,10 +44,9 @@ const deleteFarmerProfileService = async (id) =>{
     return result.rows[0];
 };
 
-import pool from "../config/db.js"; // Ensure you have the database connection
 
 const getAllFarmersService = async () => {
-    const query = "SELECT * FROM farmers"; // Adjust table name if necessary
+    const query = "SELECT * FROM farmers"; 
     const result = await pool.query(query);
     return result.rows;
 };

@@ -21,6 +21,31 @@ pool.on("error", (err) => {
     console.error("❌ Database Connection Error:", err);
 });
 
+
+// Function to create the "farmers" table if it doesn't exist
+const createFarmersTable = async () => {
+    const query = `
+        CREATE TABLE IF NOT EXISTS farmers (
+            id SERIAL PRIMARY KEY,
+            first_name VARCHAR(255) NOT NULL,
+            last_name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    `;
+
+    try {
+        await pool.query(query);
+        console.log("✅ Farmers table is ready!");
+    } catch (error) {
+        console.error("❌ Error creating table:", error);
+    }
+};
+
+// Call the function when the app starts
+createFarmersTable();
+
 // Testing the connection by querying the database
 pool.query('SELECT NOW()', (err, res) => {
     if (err) {
