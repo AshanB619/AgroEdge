@@ -30,6 +30,9 @@ const createFarmersTable = async () => {
             first_name VARCHAR(255) NOT NULL,
             last_name VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
+            district VARCHAR(255) NOT NULL,
+            farmSize FLOAT,
+            farmingExperience INT,
             password TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );

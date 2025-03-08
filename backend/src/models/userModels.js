@@ -1,10 +1,10 @@
 import pool from "../config/dbConfig.js";
 
-const registerFarmerService = async (firstName, lastName, email, passwordHash) => {
+const registerFarmerService = async (firstName, lastName, email, passwordHash, district, farmsize, farmingexperience) => {
     try {
         const result = await pool.query(
-            "INSERT INTO farmers (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *",
-            [firstName, lastName, email, passwordHash]
+            "INSERT INTO farmers (first_name, last_name, email, password, district, farmsize, farmingexperience) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [firstName, lastName, email, passwordHash, district, farmsize, farmingexperience]
         );
         return result.rows[0];
     } catch (error) {
@@ -13,11 +13,6 @@ const registerFarmerService = async (firstName, lastName, email, passwordHash) =
     }
 };
 
-
-// const findFarmerByEmail = async (email) => {
-//     const result = await pool.query("SELECT * FROM agroedge_users WHERE email = $1", [email]);
-//     return result.rows[0];
-// };
 
 const findFarmerByEmail = async (email) => {
     console.log("🔍 Running findFarmerByEmail with:", email);

@@ -1,15 +1,15 @@
 import asyncHandler from "express-async-handler"
-import  { registerFarmerService, findFarmerByEmail, updateFarmerProfileService, deleteFarmerProfileService } from "../models/userModels.js";
+import  { registerFarmerService, findFarmerByEmail, updateFarmerProfileService, deleteFarmerProfileService, getAllFarmersService } from "../models/userModels.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 //register farmer
 const registerFarmer = asyncHandler (async (req,res)=> {
     
-    const {firstName, lastName, email, password } = req.body;
-    if(!firstName || !lastName || !email || !password){
+    const {firstName, lastName, email, password, district, farmsize = null , farmingexperience = null } = req.body;
+    if(!firstName || !lastName || !email || !password || !district){
         res.status(400);
-        throw new Error ("All fields are mandatory!" );    
+        throw new Error ("Full name, email, password and district are mandatory!" );    
     }
     
     const farmerAvailability = await findFarmerByEmail(email);
@@ -18,7 +18,7 @@ const registerFarmer = asyncHandler (async (req,res)=> {
         throw new Error("User alredy registered!!")
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newFarmer = await registerFarmerService (firstName, lastName, email, hashedPassword);
+    const newFarmer = await registerFarmerService (firstName, lastName, email, hashedPassword, district, farmsize, farmingexperience);
 
     res.status(201).json({
         message:"Registered farmer successfully ",
@@ -27,6 +27,9 @@ const registerFarmer = asyncHandler (async (req,res)=> {
             firstName: newFarmer.first_name,
             lastName: newFarmer.last_name,
             email: newFarmer.email,
+            district: newFarmer.district,
+            farmsize: newFarmer.farmsize,
+            farmingexperience: newFarmer.farmingexperience
         }
     })
 });
@@ -100,9 +103,6 @@ const deleteFarmerProfile = asyncHandler(async (req,res) => {
 
     res.status(200).json({ message: "Farmer deleted successfully", deletedFarmer });
 })
-
-
-import { getAllFarmersService } from "../models/userModels.js";
 
 // Get all farmers
 const getAllFarmers = asyncHandler(async (req, res) => {
