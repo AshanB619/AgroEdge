@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Send, Plus, MessageSquareReply, ImageIcon, Smile, ArrowLeft } from "lucide-react"
+import { Search, Send, Plus, MessageSquareReply, ImageIcon, ArrowLeft, PaperclipIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -208,7 +208,8 @@ export default function CommunityHub() {
                         <img
                           src={
                             users.find((u) => u.id === selectedMessage.userId)?.avatarUrl ||
-                            "/placeholder.svg?height=32&width=32"
+                            "/placeholder.svg?height=32&width=32" ||
+                            "/placeholder.svg"
                           }
                           alt={users.find((u) => u.id === selectedMessage.userId)?.name}
                         />
@@ -270,7 +271,8 @@ export default function CommunityHub() {
                                 <img
                                   src={
                                     users.find((u) => u.id === reply.userId)?.avatarUrl ||
-                                    "/placeholder.svg?height=32&width=32"
+                                    "/placeholder.svg?height=32&width=32" ||
+                                    "/placeholder.svg"
                                   }
                                   alt={users.find((u) => u.id === reply.userId)?.name}
                                 />
@@ -368,7 +370,8 @@ export default function CommunityHub() {
                             <img
                               src={
                                 users.find((u) => u.id === message.userId)?.avatarUrl ||
-                                "/placeholder.svg?height=32&width=32"
+                                "/placeholder.svg?height=32&width=32" ||
+                                "/placeholder.svg"
                               }
                               alt={users.find((u) => u.id === message.userId)?.name}
                             />
@@ -445,59 +448,63 @@ export default function CommunityHub() {
         </ScrollArea>
 
         <div className="p-4 border-t border-border flex-shrink-0">
-          <div className="flex items-end space-x-2">
-            <div className="flex-1">
-              {imagePreview && (
-                <div className="mb-2 relative">
-                  <img src={imagePreview || "/placeholder.svg"} alt="Preview" className="h-20 w-auto rounded-md" />
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="absolute top-1 right-1 h-6 w-6 p-0"
-                    onClick={() => {
-                      setSelectedImage(null)
-                      setImagePreview(null)
-                    }}
-                  >
-                    &times;
-                  </Button>
-                </div>
-              )}
-              <Textarea
-                placeholder={
-                  selectedMessage
-                    ? `Reply to ${users.find((u) => u.id === selectedMessage.userId)?.name}...`
-                    : "Write your message..."
+          <div className="flex items-center space-x-2 bg-accent/50 rounded-lg p-2">
+            <Textarea
+              placeholder={
+                selectedMessage
+                  ? `Reply to ${users.find((u) => u.id === selectedMessage.userId)?.name}...`
+                  : "Type your message..."
+              }
+              className="min-h-[20px] max-h-[200px] bg-transparent border-0 focus-visible:ring-0 resize-none p-2"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSendMessage()
                 }
-                className="min-h-[80px]"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault()
-                    handleSendMessage()
-                  }
-                }}
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
+              }}
+            />
+            <div className="flex items-center gap-2">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="rounded-full"
+                className="h-9 w-9 rounded-full"
                 onClick={() => document.getElementById("image-upload")?.click()}
               >
-                <ImageIcon className="h-4 w-4" />
+                <ImageIcon className="h-5 w-5 text-muted-foreground" />
                 <input type="file" id="image-upload" className="hidden" accept="image/*" onChange={handleImageUpload} />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Smile className="h-4 w-4" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 rounded-full"
+                onClick={() => document.getElementById("file-upload")?.click()}
+              >
+                <PaperclipIcon className="h-5 w-5 text-muted-foreground" />
+                <input type="file" id="file-upload" className="hidden" onChange={handleImageUpload} />
               </Button>
-              <Button size="icon" className="rounded-full" onClick={handleSendMessage}>
-                <Send className="h-4 w-4" />
+              <Button size="icon" className="h-9 w-9 rounded-full bg-primary" onClick={handleSendMessage}>
+                <Send className="h-5 w-5" />
               </Button>
             </div>
           </div>
+          {imagePreview && (
+            <div className="mt-2 relative inline-block">
+              <img src={imagePreview || "/placeholder.svg"} alt="Preview" className="h-20 w-auto rounded-md" />
+              <Button
+                variant="destructive"
+                size="sm"
+                className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full"
+                onClick={() => {
+                  setSelectedImage(null)
+                  setImagePreview(null)
+                }}
+              >
+                &times;
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
