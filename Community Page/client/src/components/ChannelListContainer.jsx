@@ -67,19 +67,19 @@ const ChannelListContainer = () => {
             <TeamChannelList 
                 {...listProps}
                 type="team"
-                isCreating={isCreating}
-                setIsCreating={setIsCreating}
-                setCreateType={setCreateType} 
-                setIsEditing={setIsEditing}
-                setToggleContainer={setToggleContainer}
+                // isCreating={isCreating}
+                // setIsCreating={setIsCreating}
+                // setCreateType={setCreateType} 
+                // setIsEditing={setIsEditing}
+                // setToggleContainer={setToggleContainer}
             />
           )}  
           Preview={(previewProps) => (
             <TeamChannelPreview 
-                {...previewProps}
-                setIsCreating={setIsCreating}
-                setIsEditing={setIsEditing}
-                setToggleContainer={setToggleContainer}
+                // {...previewProps}
+                // setIsCreating={setIsCreating}
+                // setIsEditing={setIsEditing}
+                // setToggleContainer={setToggleContainer}
                 type="team"
             />
           )}
@@ -91,19 +91,19 @@ const ChannelListContainer = () => {
             <TeamChannelList 
                 {...listProps}
                 type="messaging"
-                isCreating={isCreating}
-                setIsCreating={setIsCreating}
-                setCreateType={setCreateType} 
-                setIsEditing={setIsEditing}
-                setToggleContainer={setToggleContainer}
+                // isCreating={isCreating}
+                // setIsCreating={setIsCreating}
+                // setCreateType={setCreateType} 
+                // setIsEditing={setIsEditing}
+                // setToggleContainer={setToggleContainer}
             />
           )}  
           Preview={(previewProps) => (
             <TeamChannelPreview 
-                {...previewProps}
-                setIsCreating={setIsCreating}
-                setIsEditing={setIsEditing}
-                setToggleContainer={setToggleContainer}
+                // {...previewProps}
+                // setIsCreating={setIsCreating}
+                // setIsEditing={setIsEditing}
+                // setToggleContainer={setToggleContainer}
                 type="messaging"
             />
           )}

@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie'; //import three dependencies
 import { ChannelListContainer, ChannelContainer } from './components';
 
 //import 'stream-chat-react/dist/css/index.css'; // Legacy styles
-//import 'stream-chat-react/dist/css/v2/index.css'; // New styles
+import 'stream-chat-react/dist/css/v2/index.css'; // New styles
 
 import './App.css';
 
