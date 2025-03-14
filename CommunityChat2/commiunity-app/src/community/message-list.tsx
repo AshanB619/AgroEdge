@@ -34,8 +34,8 @@ export default function MessageList({ messages, users, onSelectMessage, selected
         return (
           <div
             key={message.id}
-            className={`flex items-start p-3 rounded-md cursor-pointer hover:bg-accent ${
-              selectedMessageId === message.id ? "bg-accent" : ""
+            className={`flex items-start p-3 rounded-md cursor-pointer hover:bg-[#DCFCE7]/50 ${
+              selectedMessageId === message.id ? "bg-[#DCFCE7]/50" : ""
             }`}
             onClick={() => onSelectMessage(message)}
           >

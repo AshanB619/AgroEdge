@@ -21,7 +21,7 @@ export default function UserProfile({ user }: UserProfileProps) {
 
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {user.tags.map((tag) => (
-            <Badge key={tag} variant="outline">
+            <Badge key={tag} className="bg-[#DCFCE7] text-[#22C55E] hover:bg-[#DCFCE7]/80 border-[#22C55E]/20">
               {tag}
             </Badge>
           ))}
@@ -64,7 +64,7 @@ export default function UserProfile({ user }: UserProfileProps) {
       </ScrollArea>
 
       <div className="p-6 border-t border-border flex-shrink-0">
-        <Button className="w-full">Message</Button>
+        <Button className="w-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white">Message</Button>
       </div>
     </>
   )

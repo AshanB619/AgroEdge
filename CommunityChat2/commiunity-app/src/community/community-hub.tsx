@@ -117,9 +117,9 @@ export default function CommunityHub() {
   }
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-screen bg-white overflow-hidden">
       {/* Left Sidebar - Message List */}
-      <div className="w-80 border-r border-border flex flex-col h-full overflow-hidden">
+      <div className="w-80 border-r border-border flex flex-col h-full overflow-hidden bg-white">
         <div className="p-4 border-b border-border flex items-center justify-between flex-shrink-0">
           <div className="flex items-center space-x-2">
             <div className="h-8 w-auto">
@@ -165,7 +165,7 @@ export default function CommunityHub() {
 
       {/* Main Content - Chat */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <div className="p-4 border-b border-border flex-shrink-0">
+        <div className="p-4 border-b border-border flex-shrink-0 bg-white">
           <div className="flex items-center">
             {selectedMessage && (
               <Button
@@ -178,7 +178,7 @@ export default function CommunityHub() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             )}
-            <h2 className="text-xl font-semibold">
+            <h2 className="text-xl font-semibold text-gray-900">
               {selectedMessage
                 ? `${users.find((u) => u.id === selectedMessage.userId)?.name}'s message`
                 : "Farmers Community Hub"}
@@ -188,17 +188,13 @@ export default function CommunityHub() {
 
         <ScrollArea className="flex-grow overflow-auto">
           <div className="p-4">
-            {!selectedMessage && (
-              <div className="mb-6 text-center">
-                <h2 className="text-2xl font-bold text-primary">Farmers Community Hub</h2>
-                <p className="text-muted-foreground">
-                  Share your farming experiences and get advice from other farmers
-                </p>
-                <div className="mt-2 flex justify-center">
-                  <div className="h-1 w-16 bg-primary rounded-full"></div>
-                </div>
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-bold text-gray-900">Farmers Community Hub</h2>
+              <p className="text-gray-600">Share your farming experiences and get advice from other farmers</p>
+              <div className="mt-2 flex justify-center">
+                <div className="h-1 w-16 bg-[#22C55E] rounded-full"></div>
               </div>
-            )}
+            </div>
             {selectedMessage ? (
               <div className="space-y-4">
                 <div className={`flex ${selectedMessage.userId === currentUser.id ? "justify-end" : "justify-start"}`}>
@@ -209,6 +205,8 @@ export default function CommunityHub() {
                           src={
                             users.find((u) => u.id === selectedMessage.userId)?.avatarUrl ||
                             "/placeholder.svg?height=32&width=32" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
                             "/placeholder.svg"
                           }
                           alt={users.find((u) => u.id === selectedMessage.userId)?.name}
@@ -217,7 +215,7 @@ export default function CommunityHub() {
                     )}
                     <div
                       className={`rounded-lg p-3 ${
-                        selectedMessage.userId === currentUser.id ? "bg-primary text-primary-foreground" : "bg-muted"
+                        selectedMessage.userId === currentUser.id ? "bg-[#22C55E] text-white" : "bg-gray-100"
                       }`}
                     >
                       <p>{selectedMessage.content}</p>
@@ -272,6 +270,8 @@ export default function CommunityHub() {
                                   src={
                                     users.find((u) => u.id === reply.userId)?.avatarUrl ||
                                     "/placeholder.svg?height=32&width=32" ||
+                                    "/placeholder.svg" ||
+                                    "/placeholder.svg" ||
                                     "/placeholder.svg"
                                   }
                                   alt={users.find((u) => u.id === reply.userId)?.name}
@@ -280,7 +280,7 @@ export default function CommunityHub() {
                             )}
                             <div
                               className={`rounded-lg p-3 ${
-                                reply.userId === currentUser.id ? "bg-primary text-primary-foreground" : "bg-muted"
+                                reply.userId === currentUser.id ? "bg-[#22C55E] text-white" : "bg-gray-100"
                               }`}
                             >
                               <p>{reply.content}</p>
@@ -371,6 +371,8 @@ export default function CommunityHub() {
                               src={
                                 users.find((u) => u.id === message.userId)?.avatarUrl ||
                                 "/placeholder.svg?height=32&width=32" ||
+                                "/placeholder.svg" ||
+                                "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
                               alt={users.find((u) => u.id === message.userId)?.name}
@@ -379,7 +381,7 @@ export default function CommunityHub() {
                         )}
                         <div
                           className={`rounded-lg p-3 ${
-                            message.userId === currentUser.id ? "bg-primary text-primary-foreground" : "bg-muted"
+                            message.userId === currentUser.id ? "bg-[#22C55E] text-white" : "bg-gray-100"
                           }`}
                         >
                           <p>{message.content}</p>
@@ -448,7 +450,7 @@ export default function CommunityHub() {
         </ScrollArea>
 
         <div className="p-4 border-t border-border flex-shrink-0">
-          <div className="flex items-center space-x-2 bg-accent/50 rounded-lg p-2">
+          <div className="flex items-center space-x-2 bg-[#DCFCE7]/50 rounded-lg p-2">
             <Textarea
               placeholder={
                 selectedMessage
@@ -484,7 +486,11 @@ export default function CommunityHub() {
                 <PaperclipIcon className="h-5 w-5 text-muted-foreground" />
                 <input type="file" id="file-upload" className="hidden" onChange={handleImageUpload} />
               </Button>
-              <Button size="icon" className="h-9 w-9 rounded-full bg-primary" onClick={handleSendMessage}>
+              <Button
+                size="icon"
+                className="h-9 w-9 rounded-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white"
+                onClick={handleSendMessage}
+              >
                 <Send className="h-5 w-5" />
               </Button>
             </div>
@@ -509,7 +515,7 @@ export default function CommunityHub() {
       </div>
 
       {/* Right Sidebar - User Profile */}
-      <div className="w-80 border-l border-border hidden lg:flex flex-col h-full overflow-hidden">
+      <div className="w-80 border-l border-border hidden lg:flex flex-col h-full overflow-hidden bg-white">
         <UserProfile
           user={selectedMessage ? users.find((u) => u.id === selectedMessage.userId) || currentUser : currentUser}
         />

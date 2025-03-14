@@ -17,7 +17,7 @@ export default function ReactionPicker({ messageId, currentUserId, reactions, on
   const popoverRef = useRef<HTMLDivElement>(null)
 
   // Available emojis
-  const emojis = ["👍", "❤️", "😂", "😢", "👏", "🌱", "🚜"]
+  const emojis = ["👍", "❤️", "😂", "😮", "😢", "👏"]
 
   // Group reactions by emoji
   const reactionCounts = reactions.reduce(
@@ -57,7 +57,7 @@ export default function ReactionPicker({ messageId, currentUserId, reactions, on
                 key={emoji}
                 variant="ghost"
                 size="sm"
-                className={`h-8 px-2 text-muted-foreground ${userReactions.includes(emoji) ? "bg-accent" : ""}`}
+                className={`h-8 px-2 text-gray-600 ${userReactions.includes(emoji) ? "bg-[#DCFCE7]" : ""}`}
                 onClick={(e) => {
                   e.stopPropagation()
                   onReact(messageId, currentUserId, emoji)
