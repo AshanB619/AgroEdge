@@ -8,9 +8,45 @@ interface MessageListProps {
   users: User[]
   onSelectMessage: (message: Message) => void
   selectedMessageId?: string
+  onNewMessage: () => void
 }
 
-export default function MessageList({ messages, users, onSelectMessage, selectedMessageId }: MessageListProps) {
+export default function MessageList({
+  messages,
+  users,
+  onSelectMessage,
+  selectedMessageId,
+  onNewMessage,
+}: MessageListProps) {
+  // Group messages by userId
+  const groupedMessages = messages.reduce(
+    (acc, message) => {
+      const existingGroup = acc.find((group) => group.userId === message.userId)
+      if (existingGroup) {
+        // Update the group if this message is more recent
+        if (new Date(message.timestamp) > new Date(existingGroup.timestamp)) {
+          existingGroup.content = message.content
+          existingGroup.timestamp = message.timestamp
+          existingGroup.imageUrl = message.imageUrl
+          existingGroup.reactions = message.reactions
+          existingGroup.replies = message.replies
+        }
+        existingGroup.messageCount++
+      } else {
+        // Create a new group
+        acc.push({
+          ...message,
+          messageCount: 1,
+        })
+      }
+      return acc
+    },
+    [] as (Message & { messageCount: number })[],
+  )
+
+  // Sort groups by most recent message
+  const sortedGroups = groupedMessages.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+
   // Group reactions by emoji for display
   const getReactionSummary = (reactions: Message["reactions"]) => {
     const emojiCounts = reactions.reduce(
@@ -28,8 +64,8 @@ export default function MessageList({ messages, users, onSelectMessage, selected
   }
 
   return (
-    <div className="space-y-1 p-2">
-      {messages.map((message) => {
+    <div className="h-full overflow-auto">
+      {sortedGroups.map((message) => {
         const user = users.find((u) => u.id === message.userId)
         return (
           <div
@@ -50,18 +86,19 @@ export default function MessageList({ messages, users, onSelectMessage, selected
                 </span>
               </div>
               <p className="text-sm text-muted-foreground truncate">{message.content}</p>
-              {(message.replies.length > 0 || message.reactions.length > 0) && (
-                <div className="flex items-center mt-1 space-x-2">
-                  {message.reactions.length > 0 && (
-                    <span className="text-xs bg-muted px-1.5 py-0.5 rounded-full">
-                      {getReactionSummary(message.reactions)}
-                    </span>
-                  )}
-                  {message.replies.length > 0 && (
-                    <span className="text-xs bg-muted px-1.5 py-0.5 rounded-full">💬 {message.replies.length}</span>
-                  )}
-                </div>
-              )}
+              <div className="flex items-center mt-1 space-x-2">
+                {message.reactions.length > 0 && (
+                  <span className="text-xs bg-muted px-1.5 py-0.5 rounded-full">
+                    {getReactionSummary(message.reactions)}
+                  </span>
+                )}
+                {message.replies.length > 0 && (
+                  <span className="text-xs bg-muted px-1.5 py-0.5 rounded-full">💬 {message.replies.length}</span>
+                )}
+                {message.messageCount > 1 && (
+                  <span className="text-xs bg-muted px-1.5 py-0.5 rounded-full">{message.messageCount} messages</span>
+                )}
+              </div>
             </div>
           </div>
         )

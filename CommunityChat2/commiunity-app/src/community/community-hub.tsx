@@ -2,9 +2,9 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Search, Send, Plus, MessageSquareReply, ImageIcon, ArrowLeft, PaperclipIcon } from "lucide-react"
+import { Search, Send, MessageSquareReply, ImageIcon, ArrowLeft, PaperclipIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -27,11 +27,21 @@ export default function CommunityHub() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const router = useRouter()
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // In a real app, you would fetch the current user from your auth system
     setCurrentUser(mockUsers[0])
   }, [])
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, selectedMessage])
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   const handleSendMessage = () => {
     if (!newMessage.trim() && !selectedImage) return
@@ -58,10 +68,11 @@ export default function CommunityHub() {
         return msg
       })
       setMessages(updatedMessages)
-      setSelectedMessage(null)
+      // Don't reset selectedMessage after sending a reply
+      // setSelectedMessage(null)
     } else {
-      // Add as a new message
-      setMessages([newMsg, ...messages])
+      // Add as a new message at the end (bottom) of the list
+      setMessages([...messages, newMsg])
     }
 
     setNewMessage("")
@@ -110,6 +121,43 @@ export default function CommunityHub() {
     )
   }
 
+  // Handle reactions for replies
+  const handleReplyReaction = (messageId: string, replyId: string, userId: string, emoji: string) => {
+    setMessages(
+      messages.map((msg) => {
+        if (msg.id === messageId) {
+          return {
+            ...msg,
+            replies: msg.replies.map((reply) => {
+              if (reply.id === replyId) {
+                const existingReactionIndex = reply.reactions.findIndex(
+                  (reaction) => reaction.userId === userId && reaction.emoji === emoji,
+                )
+
+                if (existingReactionIndex >= 0) {
+                  return {
+                    ...reply,
+                    reactions: [
+                      ...reply.reactions.slice(0, existingReactionIndex),
+                      ...reply.reactions.slice(existingReactionIndex + 1),
+                    ],
+                  }
+                } else {
+                  return {
+                    ...reply,
+                    reactions: [...reply.reactions, { userId, emoji }],
+                  }
+                }
+              }
+              return reply
+            }),
+          }
+        }
+        return msg
+      }),
+    )
+  }
+
   const filteredMessages = messages.filter((msg) => msg.content.toLowerCase().includes(searchQuery.toLowerCase()))
 
   if (!currentUser) {
@@ -147,25 +195,29 @@ export default function CommunityHub() {
           </div>
         </div>
 
-        <ScrollArea className="flex-grow overflow-auto">
+        <div className="flex-grow overflow-auto">
           <MessageList
             messages={filteredMessages}
             users={users}
             onSelectMessage={setSelectedMessage}
             selectedMessageId={selectedMessage?.id}
+            onNewMessage={() => setSelectedMessage(null)}
           />
-        </ScrollArea>
+        </div>
 
-        <div className="p-4 border-t border-border flex-shrink-0">
-          <Button className="w-full" onClick={() => setSelectedMessage(null)}>
-            <Plus className="mr-2 h-4 w-4" /> New Message
+        <div className="p-6 border-t border-border flex-shrink-0">
+          <Button
+            className="w-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white"
+            onClick={() => setSelectedMessage(null)}
+          >
+            + New Message
           </Button>
         </div>
       </div>
 
       {/* Main Content - Chat */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <div className="p-4 border-b border-border flex-shrink-0 bg-white">
+        <div className="p-4 border-b border-border flex-shrink-0 bg-white sticky top-0 z-10">
           <div className="flex items-center">
             {selectedMessage && (
               <Button
@@ -178,23 +230,28 @@ export default function CommunityHub() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
             )}
-            <h2 className="text-xl font-semibold text-gray-900">
-              {selectedMessage
-                ? `${users.find((u) => u.id === selectedMessage.userId)?.name}'s message`
-                : "Farmers Community Hub"}
-            </h2>
+            <div className={`${!selectedMessage ? "text-center w-full" : ""}`}>
+              <h2 className="text-xl font-semibold text-gray-900">
+                {selectedMessage
+                  ? `${users.find((u) => u.id === selectedMessage.userId)?.name}'s message`
+                  : "Farmers Community Hub"}
+              </h2>
+              {!selectedMessage && (
+                <>
+                  <p className="text-sm text-gray-600">
+                    Share your farming experiences and get advice from other farmers
+                  </p>
+                  <div className="mt-2 flex justify-center">
+                    <div className="h-1 w-16 bg-[#22C55E] rounded-full"></div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
         <ScrollArea className="flex-grow overflow-auto">
           <div className="p-4">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold text-gray-900">Farmers Community Hub</h2>
-              <p className="text-gray-600">Share your farming experiences and get advice from other farmers</p>
-              <div className="mt-2 flex justify-center">
-                <div className="h-1 w-16 bg-[#22C55E] rounded-full"></div>
-              </div>
-            </div>
             {selectedMessage ? (
               <div className="space-y-4">
                 <div className={`flex ${selectedMessage.userId === currentUser.id ? "justify-end" : "justify-start"}`}>
@@ -315,41 +372,9 @@ export default function CommunityHub() {
                             messageId={reply.id}
                             currentUserId={currentUser.id}
                             reactions={reply.reactions}
-                            onReact={(replyId, userId, emoji) => {
-                              setMessages(
-                                messages.map((msg) => {
-                                  if (msg.id === selectedMessage?.id) {
-                                    return {
-                                      ...msg,
-                                      replies: msg.replies.map((r) => {
-                                        if (r.id === replyId) {
-                                          const existingReactionIndex = r.reactions.findIndex(
-                                            (reaction) => reaction.userId === userId && reaction.emoji === emoji,
-                                          )
-
-                                          if (existingReactionIndex >= 0) {
-                                            return {
-                                              ...r,
-                                              reactions: [
-                                                ...r.reactions.slice(0, existingReactionIndex),
-                                                ...r.reactions.slice(existingReactionIndex + 1),
-                                              ],
-                                            }
-                                          } else {
-                                            return {
-                                              ...r,
-                                              reactions: [...r.reactions, { userId, emoji }],
-                                            }
-                                          }
-                                        }
-                                        return r
-                                      }),
-                                    }
-                                  }
-                                  return msg
-                                }),
-                              )
-                            }}
+                            onReact={(replyId, userId, emoji) =>
+                              handleReplyReaction(selectedMessage.id, replyId, userId, emoji)
+                            }
                           />
                         </div>
                       </div>
@@ -358,6 +383,7 @@ export default function CommunityHub() {
                     <p className="text-sm text-muted-foreground">No replies yet. Be the first to reply!</p>
                   )}
                 </div>
+                <div ref={messagesEndRef} />
               </div>
             ) : (
               <div className="space-y-6">
@@ -444,6 +470,7 @@ export default function CommunityHub() {
                     )}
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
             )}
           </div>
