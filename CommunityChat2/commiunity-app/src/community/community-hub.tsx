@@ -67,9 +67,14 @@ export default function CommunityHub() {
         }
         return msg
       })
+
+      // Update the selected message with the new reply
+      const updatedSelectedMessage = updatedMessages.find((msg) => msg.id === selectedMessage.id)
       setMessages(updatedMessages)
-      // Don't reset selectedMessage after sending a reply
-      // setSelectedMessage(null)
+
+      if (updatedSelectedMessage) {
+        setSelectedMessage(updatedSelectedMessage)
+      }
     } else {
       // Add as a new message at the end (bottom) of the list
       setMessages([...messages, newMsg])
@@ -123,39 +128,47 @@ export default function CommunityHub() {
 
   // Handle reactions for replies
   const handleReplyReaction = (messageId: string, replyId: string, userId: string, emoji: string) => {
-    setMessages(
-      messages.map((msg) => {
-        if (msg.id === messageId) {
-          return {
-            ...msg,
-            replies: msg.replies.map((reply) => {
-              if (reply.id === replyId) {
-                const existingReactionIndex = reply.reactions.findIndex(
-                  (reaction) => reaction.userId === userId && reaction.emoji === emoji,
-                )
+    const updatedMessages = messages.map((msg) => {
+      if (msg.id === messageId) {
+        return {
+          ...msg,
+          replies: msg.replies.map((reply) => {
+            if (reply.id === replyId) {
+              const existingReactionIndex = reply.reactions.findIndex(
+                (reaction) => reaction.userId === userId && reaction.emoji === emoji,
+              )
 
-                if (existingReactionIndex >= 0) {
-                  return {
-                    ...reply,
-                    reactions: [
-                      ...reply.reactions.slice(0, existingReactionIndex),
-                      ...reply.reactions.slice(existingReactionIndex + 1),
-                    ],
-                  }
-                } else {
-                  return {
-                    ...reply,
-                    reactions: [...reply.reactions, { userId, emoji }],
-                  }
+              if (existingReactionIndex >= 0) {
+                return {
+                  ...reply,
+                  reactions: [
+                    ...reply.reactions.slice(0, existingReactionIndex),
+                    ...reply.reactions.slice(existingReactionIndex + 1),
+                  ],
+                }
+              } else {
+                return {
+                  ...reply,
+                  reactions: [...reply.reactions, { userId, emoji }],
                 }
               }
-              return reply
-            }),
-          }
+            }
+            return reply
+          }),
         }
-        return msg
-      }),
-    )
+      }
+      return msg
+    })
+
+    setMessages(updatedMessages)
+
+    // Update the selected message if it's the one being reacted to
+    if (selectedMessage && selectedMessage.id === messageId) {
+      const updatedSelectedMessage = updatedMessages.find((msg) => msg.id === messageId)
+      if (updatedSelectedMessage) {
+        setSelectedMessage(updatedSelectedMessage)
+      }
+    }
   }
 
   const filteredMessages = messages.filter((msg) => msg.content.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -262,8 +275,6 @@ export default function CommunityHub() {
                           src={
                             users.find((u) => u.id === selectedMessage.userId)?.avatarUrl ||
                             "/placeholder.svg?height=32&width=32" ||
-                            "/placeholder.svg" ||
-                            "/placeholder.svg" ||
                             "/placeholder.svg"
                           }
                           alt={users.find((u) => u.id === selectedMessage.userId)?.name}
@@ -327,8 +338,6 @@ export default function CommunityHub() {
                                   src={
                                     users.find((u) => u.id === reply.userId)?.avatarUrl ||
                                     "/placeholder.svg?height=32&width=32" ||
-                                    "/placeholder.svg" ||
-                                    "/placeholder.svg" ||
                                     "/placeholder.svg"
                                   }
                                   alt={users.find((u) => u.id === reply.userId)?.name}
@@ -397,8 +406,6 @@ export default function CommunityHub() {
                               src={
                                 users.find((u) => u.id === message.userId)?.avatarUrl ||
                                 "/placeholder.svg?height=32&width=32" ||
-                                "/placeholder.svg" ||
-                                "/placeholder.svg" ||
                                 "/placeholder.svg"
                               }
                               alt={users.find((u) => u.id === message.userId)?.name}
