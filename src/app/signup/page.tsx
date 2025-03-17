@@ -22,7 +22,7 @@ export default function SignupPage() {
       <div className="flex flex-col items-center justify-center h-screen py-2">
         <h1 className=" text-black text-4xl  font-bold">Welcome Back</h1>
         <br />
-        <h2 className="text-black text-center  font-medium">
+        <h2 className="text-black text-center  ">
           Today is a new day. It's your day. You shape it.
           <br /> Sign in to start managing your projects.
         </h2>

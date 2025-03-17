@@ -1,28 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
+/* Force light theme colors */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Light theme background */
+  --foreground: #171717; /* Light theme text color */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Set color-scheme to light */
+html {
+  color-scheme: light;
 }
 
+/* Apply background and text color */
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
+/* Remove dark mode styles */
+body {
+  background: #ffffff !important; /* Force light background */
+  color: #171717 !important; /* Force light text color */
+}
