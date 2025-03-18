@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
+import { useRouter } from 'next/navigation';
 import { FaRegIdCard } from "react-icons/fa6";
 import { LuCircleUserRound } from "react-icons/lu";
 import { TbReportAnalytics } from "react-icons/tb";
 import { HiHome } from "react-icons/hi2";
-import { HiDownload } from "react-icons/hi"; // Import download icon
+import { HiDownload } from "react-icons/hi"; 
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 // Sample data to show how it would look
 const sampleReport = {
@@ -72,12 +75,66 @@ const sampleReport = {
 
 export default function FarmerReportDemo() {
   // Function to handle downloading the report as PDF
+  
   const handleDownloadReport = () => {
-    console.log("Downloading report as PDF...");
+      console.log("Downloading report...");
+      const reportElement = document.querySelector('.relative.flex.flex-col.p-4') as HTMLElement;
+      
+      if (!reportElement) {
+        console.error("Report element not found");
+        return;
+      }
+            
+      html2canvas(reportElement, {
+        
+        scale: 2, 
+        useCORS: true, 
+        logging: false, 
+        height: reportElement.scrollHeight,
+        windowHeight: reportElement.scrollHeight
+      }).then(canvas => {
+        // Create a new jsPDF instance
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Calculate dimensions
+        const imgWidth = 210; 
+        const pageHeight = 297; 
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        // Get the image data from canvas
+        const imgData = canvas.toDataURL('image/png');
+        
+        // Add image to PDF
+        let heightLeft = imgHeight;
+        let position = 0;
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Add new pages if the content overflows a single page
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        
+        // Create a filename with farmer name and ID
+        const filename = `${sampleReport.farmerName}_${sampleReport.farmerId}_Report.pdf`;
+        
+        // Save the PDF
+        pdf.save(filename);
+        
+        console.log("Report downloaded successfully");
+      }).catch(error => {
+        console.error("Error generating PDF:", error);
+      });
+
   };
 
   // Function to handle returning to home
+  const router = useRouter();
   const handleReturnHome = () => {
+    router.push('/');
     console.log("Returning to home...");
   };
 
@@ -93,9 +150,9 @@ export default function FarmerReportDemo() {
             <h1 className="font-sans text-2xl font-bold tracking-tight text-black sm:text-3xl md:text-4xl">
               Farmer Performance Report
             </h1>
-            <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-3">
-              <div className="flex items-center justify-center gap-4 p-4 border border-green-300 rounded-lg bg-gray-50">
-                <LuCircleUserRound className="w-8 h-8 text-green-400" />
+            <div className="grid grid-cols-1 gap-4 mt-8 md:grid-cols-3 ">
+              <div className="flex items-center justify-center gap-4 p-4 transition-colors duration-300 border border-green-300 rounded-lg group bg-gray-50 hover:bg-green-300 hover:text-white">
+                <LuCircleUserRound className="w-8 h-8 text-green-400 transition-colors duration-300 group-hover:text-white " />
                 <div className="text-center">
                   <h3 className="text-lg font-medium">Farmer Name</h3>
                   <p className="text-xl font-semibold">
@@ -104,8 +161,8 @@ export default function FarmerReportDemo() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center gap-4 p-4 border border-green-300 rounded-lg bg-gray-50">
-                <FaRegIdCard className="w-8 h-8 text-green-400" />
+              <div className="flex items-center justify-center gap-4 p-4 transition-colors duration-300 border border-green-300 rounded-lg group bg-gray-50 hover:bg-green-300 hover:text-white">
+                <FaRegIdCard className="w-8 h-8 text-green-400 transition-colors duration-300 group-hover:text-white" />
                 <div className="text-center">
                   <h3 className="text-lg font-medium">Farmer ID</h3>
                   <p className="text-xl font-semibold">
@@ -114,8 +171,8 @@ export default function FarmerReportDemo() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center gap-4 p-4 border border-green-300 rounded-lg bg-gray-50">
-                <TbReportAnalytics className="w-8 h-8 text-green-400" />
+              <div className="flex items-center justify-center gap-4 p-4 transition-colors duration-300 border border-green-300 rounded-lg group bg-gray-50 hover:bg-green-300 hover:text-white">
+                <TbReportAnalytics className="w-8 h-8 text-green-400 transition-colors duration-300 group-hover:text-white" />
                 <div className="text-center">
                   <h3 className="text-lg font-medium">Final Score</h3>
                   <p className="text-xl font-semibold">
@@ -128,7 +185,7 @@ export default function FarmerReportDemo() {
 
           {/* Criteria Table */}
           <div className="mb-8">
-            <h2 className="mb-4 text-xl font-semibold text-black">
+            <h2 className="mt-8 mb-6 text-xl font-semibold text-black">
               Performance Criteria
             </h2>
             <div className="overflow-x-auto">
@@ -168,7 +225,10 @@ export default function FarmerReportDemo() {
 
           {/* Recommendations Section */}
           <div>
-            <h2 className="mb-4 text-xl font-semibold">Recommendations</h2>
+            <h2 className="mt-8 mb-6 text-xl font-semibold">
+              Recommendations from Team{" "}
+              <span className="text-green-400">AgroEdge...</span>
+            </h2>
             <ul className="pl-5 space-y-2 list-disc">
               {sampleReport.recommendations.map((recommendation, index) => (
                 <li key={index} className="text-gray-500 ">
