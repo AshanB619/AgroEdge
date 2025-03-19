@@ -2,7 +2,7 @@ import type { User } from "./types"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, MessageSquare, Clock } from "lucide-react"
+import { Mail, Phone, MessageSquare, Clock, ShieldUser } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface UserProfileProps {
@@ -33,15 +33,20 @@ export default function UserProfile({ user }: UserProfileProps) {
           <h3 className="font-medium mb-4">Farmer Information</h3>
 
           <div className="space-y-4">
+          <div className="flex items-center">
+              <ShieldUser className="h-4 w-4 mr-2 text-muted-foreground" />
+              <span className="text-sm">{user.name}</span>
+            </div>
+
             <div className="flex items-center">
               <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
               <span className="text-sm">{user.email}</span>
             </div>
 
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
               <span className="text-sm">{user.phone}</span>
-            </div>
+            </div> */}
 
             <div className="flex items-center">
               <MessageSquare className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -54,18 +59,18 @@ export default function UserProfile({ user }: UserProfileProps) {
             </div>
           </div>
 
-          {user.bio && (
+          {/* {user.bio && (
             <>
               <h3 className="font-medium mt-6 mb-2">About</h3>
               <p className="text-sm text-muted-foreground">{user.bio}</p>
             </>
-          )}
+          )}  */}
         </div>
       </ScrollArea>
 
-      <div className="p-6 border-t border-border flex-shrink-0">
+      {/* <div className="p-6 border-t border-border flex-shrink-0">
         <Button className="w-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white">Message</Button>
-      </div>
+      </div> */}
     </>
   )
 }
