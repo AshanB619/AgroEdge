@@ -6,9 +6,10 @@ import { FaRegIdCard } from "react-icons/fa6";
 import { LuCircleUserRound } from "react-icons/lu";
 import { TbReportAnalytics } from "react-icons/tb";
 import { HiHome } from "react-icons/hi2";
-import { HiDownload } from "react-icons/hi"; 
+import { HiDownload, HiOutlineCurrencyDollar } from "react-icons/hi"; 
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 
 // Sample data to show how it would look
 const sampleReport = {
@@ -130,9 +131,13 @@ export default function FarmerReportDemo() {
       });
 
   };
-
+//Function to handle route to prices page
+const router = useRouter();
+const handlePrices = () => {
+  router.push('/price');
+  console.log("Redirecting to prices page...");
+};
   // Function to handle returning to home
-  const router = useRouter();
   const handleReturnHome = () => {
     router.push('/');
     console.log("Returning to home...");
@@ -240,12 +245,20 @@ export default function FarmerReportDemo() {
 
           {/* Button container with absolute positioning */}
           <div className="absolute bottom-0 right-0 flex pb-4 pr-4 space-x-4">
-            <button
+          <button
               onClick={handleDownloadReport}
               className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-green-400 rounded-md hover:bg-green-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-300"
             >
               <HiDownload className="w-5 h-5 mr-2" />
               Download Report
+            </button>
+                        
+            <button
+              onClick={handlePrices}
+              className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-indigo-300 rounded-md hover:bg-indigo-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-300"
+            >
+              <HiOutlineCurrencyDollar className="w-5 h-5 mr-2" />
+              See vegetable prices
             </button>
             <button
               onClick={handleReturnHome}
