@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000', // Your Next.js frontend URL
+        origin: 'http://localhost:3000', // Next.js frontend URL
         methods: ['GET', 'POST'],
     },
 });

@@ -2,10 +2,8 @@ export interface User {
   id: string
   name: string
   email: string
-  phone: string
   avatarUrl?: string
   location: string
-  bio?: string
   tags: string[]
   joinDate: string
   messageCount: number
