@@ -11,17 +11,20 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.get('/', async (req, res) => {
     try {
         const result = await pool.query(
-            'SELECT m.*, u.username, p.profile_picture FROM messages m JOIN users u ON m.user_id = u.id LEFT JOIN profiles p ON u.id = p.user_id ORDER BY m.created_at DESC'
+            'SELECT m.*, p.username, p.profile_picture ' +
+            'FROM comm_messages m ' +
+            'JOIN comm_profile p ON m.user_id = p.user_id ' +
+            'ORDER BY m.created_at DESC'
         );
         const messages = result.rows;
 
         for (let message of messages) {
             const reactionsResult = await pool.query(
-                'SELECT * FROM reactions WHERE message_id = $1',
+                'SELECT * FROM comm_message_reactions WHERE message_id = $1',
                 [message.id]
             );
             message.reactions = reactionsResult.rows.map(r => ({
-                userId: r.user_id.toString(),
+                userId: r.user_id,
                 emoji: r.emoji,
             }));
             if (message.image_data) {
@@ -41,18 +44,22 @@ router.get('/:messageId/replies', async (req, res) => {
     const { messageId } = req.params;
     try {
         const result = await pool.query(
-            'SELECT r.*, u.username, p.profile_picture FROM replies r JOIN users u ON r.user_id = u.id LEFT JOIN profiles p ON u.id = p.user_id WHERE r.message_id = $1 ORDER BY r.created_at ASC',
+            'SELECT r.*, p.username, p.profile_picture ' +
+            'FROM comm_replies r ' +
+            'JOIN comm_profile p ON r.user_id = p.user_id ' +
+            'WHERE r.message_id = $1 ' +
+            'ORDER BY r.created_at ASC',
             [messageId]
         );
         const replies = result.rows;
 
         for (let reply of replies) {
             const reactionsResult = await pool.query(
-                'SELECT * FROM reply_reactions WHERE reply_id = $1',
+                'SELECT * FROM comm_reply_reactions WHERE reply_id = $1',
                 [reply.id]
             );
             reply.reactions = reactionsResult.rows.map(r => ({
-                userId: r.user_id.toString(),
+                userId: r.user_id,
                 emoji: r.emoji,
             }));
             if (reply.image_data) {

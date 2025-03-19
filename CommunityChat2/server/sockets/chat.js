@@ -13,20 +13,20 @@ const setupSocket = (io) => {
             try {
                 const imageData = imageBase64 ? Buffer.from(imageBase64, 'base64') : null;
                 const result = await pool.query(
-                    'INSERT INTO messages (user_id, content, image_data) VALUES ($1, $2, $3) RETURNING *',
+                    'INSERT INTO comm_messages (user_id, content, image_data) VALUES ($1, $2, $3) RETURNING *',
                     [userId, content, imageData]
                 );
                 const newMessage = result.rows[0];
 
-                // Increment message count in profile
+                // Increment message count in comm_profile
                 await pool.query(
-                    'UPDATE profiles SET message_count = message_count + 1 WHERE user_id = $1',
+                    'UPDATE comm_profile SET message_count = message_count + 1 WHERE user_id = $1',
                     [userId]
                 );
 
                 // Fetch user details for the message
                 const userResult = await pool.query(
-                    'SELECT u.username, p.profile_picture FROM users u LEFT JOIN profiles p ON u.id = p.user_id WHERE u.id = $1',
+                    'SELECT username, profile_picture FROM comm_profile WHERE user_id = $1',
                     [userId]
                 );
                 newMessage.username = userResult.rows[0].username;
@@ -53,14 +53,14 @@ const setupSocket = (io) => {
             try {
                 const imageData = imageBase64 ? Buffer.from(imageBase64, 'base64') : null;
                 const result = await pool.query(
-                    'INSERT INTO replies (message_id, user_id, content, image_data) VALUES ($1, $2, $3, $4) RETURNING *',
+                    'INSERT INTO comm_replies (message_id, user_id, content, image_data) VALUES ($1, $2, $3, $4) RETURNING *',
                     [messageId, userId, content, imageData]
                 );
                 const newReply = result.rows[0];
 
                 // Fetch user details for the reply
                 const userResult = await pool.query(
-                    'SELECT u.username, p.profile_picture FROM users u LEFT JOIN profiles p ON u.id = p.user_id WHERE u.id = $1',
+                    'SELECT username, profile_picture FROM comm_profile WHERE user_id = $1',
                     [userId]
                 );
                 newReply.username = userResult.rows[0].username;
@@ -85,7 +85,7 @@ const setupSocket = (io) => {
         socket.on('reactToMessage', async ({ messageId, userId, emoji }) => {
             try {
                 const reactionResult = await pool.query(
-                    'INSERT INTO reactions (message_id, user_id, emoji) VALUES ($1, $2, $3) ON CONFLICT (message_id, user_id, emoji) DO DELETE RETURNING *',
+                    'INSERT INTO comm_message_reactions (message_id, user_id, emoji) VALUES ($1, $2, $3) ON CONFLICT (message_id, user_id, emoji) DO DELETE RETURNING *',
                     [messageId, userId, emoji]
                 );
                 io.to('community-hub').emit('reactionUpdated', {
@@ -103,7 +103,7 @@ const setupSocket = (io) => {
         socket.on('reactToReply', async ({ messageId, replyId, userId, emoji }) => {
             try {
                 const reactionResult = await pool.query(
-                    'INSERT INTO reply_reactions (reply_id, user_id, emoji) VALUES ($1, $2, $3) ON CONFLICT (reply_id, user_id, emoji) DO DELETE RETURNING *',
+                    'INSERT INTO comm_reply_reactions (reply_id, user_id, emoji) VALUES ($1, $2, $3) ON CONFLICT (reply_id, user_id, emoji) DO DELETE RETURNING *',
                     [replyId, userId, emoji]
                 );
                 io.to('community-hub').emit('replyReactionUpdated', {

@@ -1,0 +1,6 @@
+INSERT INTO comm_messages (user_id, content, created_at, likes, hearts, shares) VALUES
+('006f063faa', 'Has anyone dealt with tomato blight this season? I''m seeing early signs in my greenhouse and looking for organic solutions that won''t harm beneficial insects.', '2023-06-15 10:30:00', 0, 0, 0), -- msg1, user2
+('00ad412e38', 'Looking for recommendations on drought-resistant feed crops for cattle. Our rainfall has been below average for the third year in a row, and I need to plan for next season.', '2023-06-14 15:45:00', 0, 0, 0), -- msg2, user3
+('005a8061c6', 'Just installed a new precision planting system for my corn fields. Happy to share my experience if anyone is considering an upgrade this year. The yield improvement has been significant!', '2023-06-13 09:10:00', 0, 0, 0), -- msg3, user1
+('00f583d7a9', 'Does anyone have experience with mobile chicken coops for pasture rotation? Looking at building one this summer to improve our egg production and soil health.', '2023-06-12 14:25:00', 0, 0, 0), -- msg4, user4
+('014be6a8c3', 'Has anyone implemented drip irrigation for berries? I''m expanding my blueberry operation and want to maximize water efficiency. Looking for recommendations on equipment and setup.', '2023-06-11 11:20:00', 0, 0, 0); -- msg5, user5
