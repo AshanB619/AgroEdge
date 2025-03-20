@@ -1,0 +1,6 @@
+PS C:\Users\user\Documents\New folder\AgroEdge\server\management> git push -u origin Helith
+To https://github.com/AshanB619/AgroEdge.git
+ ! [rejected]          Helith -> Helith (fetch first)
+error: failed to push some refs to 'https://github.com/AshanB619/AgroEdge.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
