@@ -1,3 +1,4 @@
+// components/cards/forecast-card.tsx
 "use client";
 
 import React from 'react';
@@ -45,11 +46,11 @@ export const ForecastCard: React.FC<ForecastCardProps> = ({ data }) => {
             <div className={`flex items-center ${priceChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {priceChange >= 0 ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M12 7a1 1 0 01-1-1V5H7a1 1 0 01-1-1V3a1 1 0 011-1h4a1 1 0 01.707.293l4 4A1 1 0 0115 7h-2a1 1 0 01-1-1zm-7 9a1 1 0 01-1-1v-1h4a1 1 0 001-1v-3a1 1 0 011-1h2L7 3.993V6a1 1 0 01-1 1H4v6h10v-3.586l-2.707 2.707A1 1 0 0110 12v-1a1 1 0 00-1-1H7a1 1 0 00-1 1v3a1 1 0 01-1 1z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M12 13a1 1 0 01-1 1H9a1 1 0 01-1-1v-1H4a1 1 0 01-1-1V8a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0110 2h1a1 1 0 011 1v10zm-2-9H8v5a1 1 0 01-1 1H5v2h10V8h-4V4z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               )}
               <span className="ml-1">{Math.abs(priceChangePercentage).toFixed(2)}%</span>
