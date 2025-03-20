@@ -62,7 +62,7 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
           await new Promise((resolve) => setTimeout(resolve, 1500))
     
           // Redirect to the new session page
-          router.push("/activities/1")
+          router.push("/activities")
           onOpenChange(false)
         } catch (error) {
           console.error("Error creating session:", error)
@@ -259,7 +259,7 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
                                     <SelectItem value="Grumusols">Grumusols</SelectItem>
                                     <SelectItem value="Sandy Loam Soil">Sandy Loam Soil</SelectItem>
                                     <SelectItem value="Loamy Soil">Loamy Soil</SelectItem>
-                                    <SelectItem value="SSilty Loam Soil">Silty Loam Soil</SelectItem>
+                                    <SelectItem value="Silty Loam Soil">Silty Loam Soil</SelectItem>
                                     <SelectItem value="Red Yellow Podzolic">Red Yellow Podzolic</SelectItem>
                                     <SelectItem value="Mountain Reddish Brown">Mountain Reddish Brown</SelectItem>
                                 </SelectContent>

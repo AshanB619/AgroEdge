@@ -218,29 +218,7 @@ export default function SignUpPage() {
                 {errors.district && <p className="text-sm text-red-500">{errors.district}</p>}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="farmSize">Farm Size (acres)</Label>
-                <Input
-                  id="farmSize"
-                  type="number"
-                  placeholder="Enter your farm size"
-                  value={formData.farmSize}
-                  onChange={(e) => setFormData({ ...formData, farmSize: e.target.value })}
-                />
-                <p className="text-xs text-gray-500">Optional</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="farmingExperience">Farming Experience (years)</Label>
-                <Input
-                  id="farmingExperience"
-                  type="number"
-                  placeholder="Years of farming experience"
-                  value={formData.farmingExperience}
-                  onChange={(e) => setFormData({ ...formData, farmingExperience: e.target.value })}
-                />
-                <p className="text-xs text-gray-500">Optional</p>
-              </div>
+              
 
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
