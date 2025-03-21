@@ -1,5 +1,10 @@
 const { validationResult } = require('express-validator');
 const Session = require('../models/Session');
+const FertilizerUpload = require('../models/FertilizerUpload');
+const PesticideUpload = require('../models/PesticideUpload');
+const IrrigationUpload = require('../models/IrrigationUpload');
+const LaborUpload = require('../models/LaborUpload');
+const calculationService = require('../services/calculationService');
 const logger = require('../loggingOperations/logger');
 
 // Create a new session
@@ -21,8 +26,6 @@ exports.createSession = async (req, res) => {
     const session = await Session.create({
       user_id: req.userId,
       farm_size,
-      
-      village,
       district,
       crop_type,
       veg_variety,
@@ -145,56 +148,88 @@ exports.updateSoilInfo = async (req, res) => {
   }
 };
 
-// End a session
+//End a session
 exports.endSession = async (req, res) => {
   try {
-    const { actual_harvest, selling_price, buyer_type, storage_method } = req.body;
-    
-    // Find session
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { id } = req.params;
+    const { actual_harvest } = req.body;
+
+    // Check if session exists and belongs to the user
     const session = await Session.findOne({
-      where: { 
-        id: req.params.id,
+      where: {
+        id,
         user_id: req.userId,
         is_active: true
       }
     });
-    
+
     if (!session) {
-      return res.status(404).json({ 
-        message: 'Active session not found or you do not have permission to end it' 
+      return res.status(404).json({
+        message: 'Active session not found or you do not have permission'
       });
     }
 
-     // Check if soil data is missing
-     if (!session.soil_type || !session.soil_ph) {
-      return res.status(400).json({
-        message: 'Soil data is required before ending the session. Please update soil information.'
-      });
-    }
-    
-    // Calculate total revenue and profit/loss
-    const total_revenue = actual_harvest * selling_price;
-    const profit_loss = await calculateProfit(session.id, total_revenue);
-    
-    // Update session to end it
-    await session.update({
-      actual_harvest,
-      
-      end_date: new Date(),
-      is_active: false
+    // Fetch all uploads for the session
+    const fertilizers = await FertilizerUpload.findAll({
+      where: { session_id: id }
     });
-
-    // Log session ending
-    logger.info(`User ${req.userId} ended session ID: ${session.id}, Profit/Loss: ${profit_loss}`);
     
+    const pesticides = await PesticideUpload.findAll({
+      where: { session_id: id }
+    });
+    
+    const irrigations = await IrrigationUpload.findAll({
+      where: { session_id: id }
+    });
+    
+    const labors = await LaborUpload.findAll({
+      where: { session_id: id }
+    });
+    
+    // Calculate summary using the calculation service
+    const sessionSummary = calculationService.calculateSessionSummary(
+      fertilizers, pesticides, irrigations, labors
+    );
+
+    // Update session with summary data
+    // For irrigation data
+    if (irrigations.length > 0) {
+      session.water_source = sessionSummary.irrigation.most_common_water_source;
+      session.irrigation_method = sessionSummary.irrigation.most_common_irrigation_method;
+      session.water_usage = sessionSummary.irrigation.total_water_usage;
+      session.irrigation_cost = sessionSummary.irrigation.total_irrigation_cost;
+    }
+
+    // For labor data
+    if (labors.length > 0) {
+      session.labor_hours = sessionSummary.labor.total_labor_hours;
+      session.labor_wages = sessionSummary.labor.total_labor_wages;
+    }
+
+    // Update session end data
+    session.actual_harvest = actual_harvest;
+    session.end_date = new Date();
+    session.is_active = false;
+
+    // Save the updated session
+    await session.save();
+
+    logger.info(`Session ${id} ended by user ${req.userId}`);
     res.status(200).json({
       message: 'Session ended successfully',
-      session
+      session,
+      summary: sessionSummary
     });
-    
+
   } catch (error) {
     console.error('End session error:', error);
-    logger.error(`Error ending session ${req.params.id} for User ${req.userId}: ${error.message}`);
+    logger.error(`Error ending session: ${error.message}`);
     res.status(500).json({ message: 'Server error ending session' });
   }
 };

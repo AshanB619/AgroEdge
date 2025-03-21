@@ -25,14 +25,6 @@ const PesticideUpload = sequelize.define('PesticideUpload', {
     type: DataTypes.FLOAT,
     allowNull: false
   },
-  application_frequency: {
-    type: DataTypes.STRING(50),
-    allowNull: true
-  },
-  application_method: {
-    type: DataTypes.STRING(100),
-    allowNull: true
-  },
   cost: {
     type: DataTypes.FLOAT,
     allowNull: false

@@ -4,7 +4,9 @@ const FertilizerUpload = require('../models/FertilizerUpload');
 const PesticideUpload = require('../models/PesticideUpload');
 const IrrigationUpload = require('../models/IrrigationUpload');
 const LaborUpload = require('../models/LaborUpload');
+const calculationService = require('../services/calculationService');
 const logger = require('../loggingOperations/logger');
+
 
 // Check if session exists and is active
 const checkSession = async (sessionId, userId) => {
@@ -199,8 +201,7 @@ exports.addLaborUpload = async (req, res) => {
   }
 };
 
-
-// Get all uploads for a session
+// Get all uploads for a session with summary calculations
 exports.getSessionUploads = async (req, res) => {
   try {
     const { sessionId } = req.params;
@@ -240,7 +241,10 @@ exports.getSessionUploads = async (req, res) => {
       order: [['labor_date', 'DESC']]
     });
     
-    
+    // Calculate summary using the calculation service
+    const sessionSummary = calculationService.calculateSessionSummary(
+      fertilizers, pesticides, irrigations, labors
+    );
     
     res.status(200).json({
       session,
@@ -249,11 +253,66 @@ exports.getSessionUploads = async (req, res) => {
         pesticides,
         irrigations,
         labors
-      }
+      },
+      summary: sessionSummary
     });
     
   } catch (error) {
     console.error('Get session uploads error:', error);
+    logger.error(`Error getting session uploads: ${error.message}`);
     res.status(500).json({ message: 'Server error retrieving session uploads' });
+  }
+};
+
+// Get session summary only (for dashboard or reports)
+exports.getSessionSummary = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    
+    // Check if user has access to this session
+    const session = await Session.findOne({
+      where: {
+        id: sessionId,
+        user_id: req.userId
+      }
+    });
+    
+    if (!session) {
+      return res.status(404).json({ 
+        message: 'Session not found or you do not have permission' 
+      });
+    }
+    
+    // Fetch all uploads for the session
+    const fertilizers = await FertilizerUpload.findAll({
+      where: { session_id: sessionId }
+    });
+    
+    const pesticides = await PesticideUpload.findAll({
+      where: { session_id: sessionId }
+    });
+    
+    const irrigations = await IrrigationUpload.findAll({
+      where: { session_id: sessionId }
+    });
+    
+    const labors = await LaborUpload.findAll({
+      where: { session_id: sessionId }
+    });
+    
+    // Calculate summary using the calculation service
+    const sessionSummary = calculationService.calculateSessionSummary(
+      fertilizers, pesticides, irrigations, labors
+    );
+    
+    res.status(200).json({
+      session,
+      summary: sessionSummary
+    });
+    
+  } catch (error) {
+    console.error('Get session summary error:', error);
+    logger.error(`Error getting session summary: ${error.message}`);
+    res.status(500).json({ message: 'Server error retrieving session summary' });
   }
 };

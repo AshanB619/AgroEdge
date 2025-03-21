@@ -68,8 +68,36 @@ const Session = sequelize.define('Session', {
     type: DataTypes.DATE,
     allowNull: true
   },
+
   // End session data
   actual_harvest: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  
+
+  //new fields
+  water_source: {
+    type: DataTypes.STRING(50),
+    allowNull: true
+  },
+  irrigation_method: {
+    type: DataTypes.STRING(50),
+    allowNull: true
+  },
+  water_usage: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  irrigation_cost: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  labor_hours: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  labor_wages: {
     type: DataTypes.FLOAT,
     allowNull: true
   },

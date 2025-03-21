@@ -1,0 +1,19 @@
+{"level":"error","message":"Error creating session for User 8d5b8bebb3: village is not defined","timestamp":"2025-03-19T13:12:22.929Z"}
+{"level":"error","message":"Error creating session for User 8d5b8bebb3: village is not defined","timestamp":"2025-03-19T13:12:51.089Z"}
+{"level":"error","message":"Error creating session for User 8d5b8bebb3: Validation error","timestamp":"2025-03-19T13:16:44.857Z"}
+{"level":"error","message":"Error creating session for User 8d5b8bebb3: Validation error","timestamp":"2025-03-19T13:16:46.346Z"}
+{"level":"error","message":"Error creating session for User 8d5b8bebb3: Validation error","timestamp":"2025-03-19T13:17:17.885Z"}
+{"level":"error","message":"Error creating session for User 8d5b8bebb3: Validation error","timestamp":"2025-03-19T13:18:21.962Z"}
+{"level":"info","message":"User 8d5b8bebb3 created a new session with ID: 995","timestamp":"2025-03-19T13:51:57.279Z"}
+{"level":"info","message":"User 8d5b8bebb3 created a new session with ID: 996","timestamp":"2025-03-19T13:54:20.331Z"}
+{"level":"info","message":"Fertilizer upload added for session: 996 by user 8d5b8bebb3","timestamp":"2025-03-19T13:59:24.743Z"}
+{"level":"error","message":"Error creating session for User eb5d6094ac: Validation error","timestamp":"2025-03-19T14:37:37.818Z"}
+{"level":"info","message":"User eb5d6094ac created a new session with ID: 995","timestamp":"2025-03-19T14:39:24.877Z"}
+{"level":"warn","message":"Unauthorized access to session: 995 by user 8d5b8bebb3","timestamp":"2025-03-19T14:40:10.973Z"}
+{"level":"info","message":"Fertilizer upload added for session: 995 by user eb5d6094ac","timestamp":"2025-03-19T14:40:49.988Z"}
+{"level":"info","message":"Pesticide upload added for session: 995 by user eb5d6094ac","timestamp":"2025-03-19T14:45:35.378Z"}
+{"level":"info","message":"Irrigation upload added for session: 995 by user eb5d6094ac","timestamp":"2025-03-19T15:17:03.439Z"}
+{"level":"info","message":"Irrigation upload added for session: 995 by user eb5d6094ac","timestamp":"2025-03-19T15:17:33.909Z"}
+{"level":"info","message":"Labor upload added for session: 995 by user eb5d6094ac","timestamp":"2025-03-19T15:20:35.534Z"}
+{"level":"info","message":"Labor upload added for session: 995 by user eb5d6094ac","timestamp":"2025-03-19T15:20:39.080Z"}
+{"level":"info","message":"Session 995 ended by user eb5d6094ac","timestamp":"2025-03-19T15:22:58.291Z"}
