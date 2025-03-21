@@ -196,7 +196,7 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
                             </Select>
                         </div> */}
 
-                        <div className ="space-y-2">
+                        {/* <div className ="space-y-2">
                             <Label htmlFor ="actual_harvest">Actual Harvest (kg)</Label>
                             <Input
                                 id="actual_harvest"
@@ -205,7 +205,7 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
                                 onChange={handleChange}
                                 required
                             />
-                        </div>
+                        </div> */}
 
                         
                         <div className ="space-y-2">
