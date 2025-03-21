@@ -86,10 +86,6 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
                             <Input id="farm_size" name="farm_size" value={formData.farm_size} onChange={handleChange} required/>
                         </div>
 
-                        
-
-                        
-
                         <div className="space-y-2">
                             <Label htmlFor ="district">District</Label>
                             <Select onValueChange ={(value) => handleSelectChange("district", value)}>

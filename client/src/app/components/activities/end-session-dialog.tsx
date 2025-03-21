@@ -68,15 +68,10 @@ export function EndSessionDialog({ open, onOpenChange, sessionId }: EndSessionDi
     
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="actual_yield">Actual Hrvest (kg)</Label>
-                <Input
-                  id="actual_yield"
-                  name="actual_yield"
-                  type="number"
-                  value={formData.actual_hrvest}
-                  onChange={handleChange}
-                  required
-                />
+                <div className ="space-y-2">
+                    <Label htmlFor="actual_harvest">Actual Harvest(acres)</Label>
+                    <Input id="actual_harvest" name="actual_harvest" value={formData.actual_hrvest} onChange={handleChange} required/>
+                </div>
               </div>
     
     
