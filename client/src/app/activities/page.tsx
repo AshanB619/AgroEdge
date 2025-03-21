@@ -39,7 +39,7 @@ export default function ActivitiesPage() {
                         </TabsTrigger>
                         <TabsTrigger value="completed" className ="flex gap-2 items-cenetr">
                             <CheckCircle className ="h-4 w-4"/>
-                            <span>Cpmpleted Sessions</span>
+                            <span>Completed Sessions</span>
                         </TabsTrigger>
                     </TabsList>
 
@@ -53,7 +53,7 @@ export default function ActivitiesPage() {
                     status ="active"
                     sessions ={[
                         {
-                            id: "1",
+                            id: "0",
                             cropType: "Cabbage",
                             variety: "BG 300",
                             startDate: "2024-03-01",
@@ -65,7 +65,7 @@ export default function ActivitiesPage() {
                             status: "active",
                         },
                         {
-                            id: "2",
+                            id: "1",
                             cropType: "Oinon",
                             variety: "Carrot",
                             startDate: "2024-02-15",
@@ -74,6 +74,30 @@ export default function ActivitiesPage() {
                             district: "Anuradhapura",
                             lastUpdated: "2024-03-10",
                             progress: 45,
+                            status: "active",
+                        },
+                        {
+                            id: "2",
+                            cropType: "Pumpkin",
+                            variety: "Pathma",
+                            startDate: "2024-02-15",
+                            expectedHarvestDate: "2024-04-30",
+                            farmSize: "2 acres",
+                            district: "Anuradhapura",
+                            lastUpdated: "2024-03-10",
+                            progress: 85,
+                            status: "active",
+                        },
+                        {
+                            id: "3",
+                            cropType: "Oinon",
+                            variety: "Carrot",
+                            startDate: "2024-02-15",
+                            expectedHarvestDate: "2024-04-30",
+                            farmSize: "2 acres",
+                            district: "Anuradhapura",
+                            lastUpdated: "2024-03-10",
+                            progress: 32,
                             status: "active",
                         },
                     ]}
