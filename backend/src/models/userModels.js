@@ -1,10 +1,10 @@
 import pool from "../config/dbConfig.js";
 
-const registerFarmerService = async (firstName, lastName, email, passwordHash, district, farmsize, farmingexperience) => {
+const registerFarmerService = async (fullName,  email, passwordHash ) => {
     try {
         const result = await pool.query(
-            "INSERT INTO farmers (first_name, last_name, email, password, district, farmsize, farmingexperience) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-            [firstName, lastName, email, passwordHash, district, farmsize, farmingexperience]
+            "INSERT INTO farmers (full_name, email, password) VALUES ($1, $2, $3) RETURNING *",
+            [fullName, email, passwordHash]
         );
         return result.rows[0];
     } catch (error) {
@@ -20,7 +20,7 @@ const findFarmerByEmail = async (email) => {
     try {
         const result = await pool.query("SELECT * FROM farmers WHERE email = $1", [email]);
         console.log("🔍 Query Result:", result.rows);
-        return result.rows[0];  // Ensure it correctly returns the first row or null
+        return result.rows[0];  
     } catch (error) {
         console.error("❌ Error in findFarmerByEmail:", error);
         throw new Error("Database query failed");
