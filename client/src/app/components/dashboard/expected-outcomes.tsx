@@ -1,34 +1,54 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart"
-import { cn } from "@/lib/utils"
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 
 interface ExpectedOutcomesProps {
-  className?: string
+  className?: string;
+  district: string;
 }
 
-export function ExpectedOutcomes({ className }: ExpectedOutcomesProps) {
-  // This would come from your API/database in a real application
-  const harvestData = {
-    expected_harvest: 44281.15,
-    actual_harvest: 52881.65,
-    difference_percentage: 19.4,
-    monthly_data: [
-      { month: "Month 1", expected: 0, actual: 0 },
-      { month: "Month 2", expected: 0, actual: 0 },
-      { month: "Month 3", expected: 11070, actual: 13220 },
-      { month: "Month 4", expected: 33211, actual: 39661 },
-      { month: "Month 5", expected: 44281, actual: 52882 },
-    ],
-  }
+export function ExpectedOutcomes({ className, district }: ExpectedOutcomesProps) {
+  const [harvestData, setHarvestData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!district) return;
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/best-farmers/${district}`);
+        const topFarmers = response.data.topFarmers;
+        const avgActual = topFarmers.reduce((sum: number, f: any) => sum + f.actual_harvest, 0) / topFarmers.length;
+        const avgExpected = topFarmers.reduce((sum: number, f: any) => sum + f.expected_harvest, 0) / topFarmers.length || avgActual * 0.8; // Fallback
+        setHarvestData({
+          expected_harvest: avgExpected,
+          actual_harvest: avgActual,
+          difference_percentage: ((avgActual - avgExpected) / avgExpected * 100).toFixed(1),
+          monthly_data: [
+            { month: "Month 1", expected: 0, actual: 0 },
+            { month: "Month 2", expected: avgExpected * 0.25, actual: avgActual * 0.25 },
+            { month: "Month 3", expected: avgExpected * 0.5, actual: avgActual * 0.5 },
+            { month: "Month 4", expected: avgExpected * 0.75, actual: avgActual * 0.75 },
+            { month: "Month 5", expected: avgExpected, actual: avgActual },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching outcomes:', error);
+      }
+    };
+    fetchData();
+  }, [district]);
+
+  if (!harvestData) return <Card><CardContent>Loading...</CardContent></Card>;
 
   return (
     <Card className={cn("", className)}>
       <CardHeader>
         <CardTitle>Expected Outcomes</CardTitle>
-        <CardDescription>Projected vs. actual harvest from similar farms</CardDescription>
+        <CardDescription>Projected vs. actual harvest from top farms in {district}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="mb-4 grid grid-cols-2 gap-4">
@@ -44,39 +64,30 @@ export function ExpectedOutcomes({ className }: ExpectedOutcomesProps) {
             </p>
           </div>
         </div>
-
-        <div className="h-[200px]">
-          <ChartContainer
-            config={{
-              expected: {
-                label: "Expected Harvest",
-                color: "hsl(var(--chart-1))",
-              },
-              actual: {
-                label: "Actual Harvest",
-                color: "hsl(var(--chart-2))",
-              },
-            }}
-          >
+        <div className="h-[360px] border rounded-lg p-4">
+          <ChartContainer config={{
+            expected: {
+              label: "Expected Harvest",
+              color: "#16a34a", // Green
+            },
+            actual: {
+              label: "Actual Harvest",
+              color: "#67ff93", // Orange
+            },
+          }} className="w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={harvestData.monthly_data}>
-                <XAxis dataKey="month" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis
-                  stroke="#888888"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value / 1000}k`}
-                />
+              <BarChart accessibilityLayer data={harvestData.monthly_data}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value / 1000}k`} />
                 <Tooltip content={<ChartTooltipContent />} />
-                <Line type="monotone" dataKey="expected" stroke="var(--color-expected)" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="actual" stroke="var(--color-actual)" strokeWidth={2} dot={false} />
-              </LineChart>
+                <Bar dataKey="expected" stackId="a" fill="var(--color-expected)" radius={[10, 10, 10, 10]} />
+                <Bar dataKey="actual" stackId="a" fill="var(--color-actual)" radius={[10, 10, 10, 10]} />
+              </BarChart>
             </ResponsiveContainer>
           </ChartContainer>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-
