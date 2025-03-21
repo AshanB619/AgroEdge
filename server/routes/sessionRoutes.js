@@ -2,6 +2,8 @@ const express = require('express');
 const { check } = require('express-validator');
 const sessionController = require('../controllers/sessionController');
 const authMiddleware = require('../middleware/auth');
+const { validateFarmingMetrics } = require('../middleware/sessionValidation');
+const { validateSessionDuration } = require('../middleware/sessionDurationValidator');
 
 const router = express.Router();
 
@@ -23,6 +25,7 @@ router.post(
     check('seed_quantity', 'Seed quantity is required').isFloat({ min: 0 }),
     check('seed_cost', 'Seed cost is required').isFloat({ min: 0 })
   ],
+  validateFarmingMetrics,
   sessionController.createSession
 );
 
@@ -58,6 +61,8 @@ router.patch(
     check('actual_harvest', 'Actual harvest is required').isFloat({ min: 0 }),
     
   ],
+  validateFarmingMetrics,
+  validateSessionDuration,
   sessionController.endSession
 );
 
