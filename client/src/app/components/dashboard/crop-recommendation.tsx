@@ -51,8 +51,8 @@ export function CropRecommendation({ className, district, farmSize, soilType }: 
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center justify-center text-center">
-          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-            <Leaf className="h-10 w-10 text-primary" />
+          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-200">
+            <Leaf className="h-10 w-10 text-green-900" />
           </div>
           <h3 className="text-2xl font-bold">{cropData.crop_type}</h3>
           <p className="text-muted-foreground">{cropData.veg_variety}</p>

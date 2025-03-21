@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+import { ResourceRequirements } from './resource-requirements'; // Assuming this exists now
 
 const DISTRICTS = [
   'Matale', 'NuwaraEliya', 'Puttalama', 'Vavuniya', 'Badulla', 'Batticaloa', 'Kilinochchi', 
@@ -24,22 +25,21 @@ export default function NewFarmerClient() {
 
   return (
     <div className="p-5">
-      <div className="mb-6 justify-center">
-        <div className ="justify-center">
+      <div className="mb-6 flex justify-center">
+        <div className="w-full max-w-md">
           <Label htmlFor="district">District</Label>
-          <div className ="justify-center pt-2 ">
+          <div className="pt-2">
             <Select value={district} onValueChange={setDistrict}>
-                <SelectTrigger id="district" className="bg-green-50">
+              <SelectTrigger id="district" className="bg-green-50">
                 <SelectValue placeholder="Select your district" />
-                </SelectTrigger>
-                <SelectContent>
+              </SelectTrigger>
+              <SelectContent>
                 {DISTRICTS.map((d) => (
-                    <SelectItem key={d} value={d}>{d}</SelectItem>
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
                 ))}
-                </SelectContent>
+              </SelectContent>
             </Select>
           </div>
-          
         </div>
       </div>
 
@@ -51,8 +51,7 @@ export default function NewFarmerClient() {
           </div>
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <ExpectedOutcomes district={district} />
-            {/* Placeholder for ResourceRequirements */}
-            <Card><CardContent>Resource Requirements (To be implemented)</CardContent></Card>
+            <ResourceRequirements district={district} farmSize={farmSize} soilType={soilType} />
           </div>
           <div className="mt-6 grid gap-6">
             <NewFarmerDashboard district={district} />

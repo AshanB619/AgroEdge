@@ -30,12 +30,12 @@ export function NextSteps ({ className }: NextStepsProps) {
           {nextSteps.map((step, index) => (
             <Card key={index} className ="border-none shadow-none">
               <CardContent className ="p-4">
-                <div className ="mb-4 flex h-10 4-10 items-center justify-center rounded-full bg-primary/10">
-                  <step.icon className ="h-5 w-5 text-primary"/>
+                <div className ="mb-4 flex h-10 4-10 items-center justify-center rounded-full bg-green-200">
+                  <step.icon className ="h-5 w-5 text-green-900"/>
                 </div>
                 <h3 className = "mb-1 text-base font-medium">{step.title}</h3>
                 <p className =" mb-4 text-sm text-muted-foreground">{step.description}</p>
-                <Button variant ="outline" size="sm" asChild>
+                <Button className="bg-green-50 hover:bg-green-500 hover:text-green-50" variant ="outline" size="sm" asChild>
                   <a href={step.href}>
                     {step.action}
                     <ArrowRight className ="ml-1 h-4 w-4"/>
