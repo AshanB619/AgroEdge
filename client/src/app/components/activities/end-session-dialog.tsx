@@ -9,9 +9,6 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 
-
-
-
 interface EndSessionDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
@@ -22,10 +19,8 @@ export function EndSessionDialog({ open, onOpenChange, sessionId }: EndSessionDi
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [formData, setFormData] = useState({
-        actual_yield: "",
-        selling_price: "",
-        buyer_type: "",
-        storage_method: "",
+        actual_hrvest: "",
+        
       })
 
       const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,66 +68,23 @@ export function EndSessionDialog({ open, onOpenChange, sessionId }: EndSessionDi
     
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="actual_yield">Actual Yield (kg)</Label>
+                <Label htmlFor="actual_yield">Actual Hrvest (kg)</Label>
                 <Input
                   id="actual_yield"
                   name="actual_yield"
                   type="number"
-                  value={formData.actual_yield}
+                  value={formData.actual_hrvest}
                   onChange={handleChange}
                   required
                 />
               </div>
     
-              <div className="space-y-2">
-                <Label htmlFor="selling_price">Selling Price (Rs./kg)</Label>
-                <Input
-                  id="selling_price"
-                  name="selling_price"
-                  type="number"
-                  value={formData.selling_price}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-    
-              <div className="space-y-2">
-                <Label htmlFor="buyer_type">Buyer Type</Label>
-                <Select onValueChange={(value) => handleSelectChange("buyer_type", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select buyer type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="direct_consumer">Direct Consumer</SelectItem>
-                    <SelectItem value="wholesaler">Wholesaler</SelectItem>
-                    <SelectItem value="retailer">Retailer</SelectItem>
-                    <SelectItem value="cooperative">Cooperative</SelectItem>
-                    <SelectItem value="government">Government</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-    
-              <div className="space-y-2">
-                <Label htmlFor="storage_method">Storage Method</Label>
-                <Select onValueChange={(value) => handleSelectChange("storage_method", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select storage method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bags">Bags</SelectItem>
-                    <SelectItem value="silo">Silo</SelectItem>
-                    <SelectItem value="cold_storage">Cold Storage</SelectItem>
-                    <SelectItem value="warehouse">Warehouse</SelectItem>
-                    <SelectItem value="none">None (Direct Sale)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
     
               <DialogFooter className="mt-6">
                 <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting} className="bg-green-500 hover:bg-green-300 hover:text-green-900">
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
