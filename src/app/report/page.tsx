@@ -154,7 +154,7 @@ export default function FarmerReportDemo() {
           {/* Header Section */}
           <div className="mb-8 text-center">
             <h1 className="font-sans text-2xl font-bold tracking-tight text-black sm:text-3xl md:text-4xl">
-              Farmer Performance Report
+              Farmer Performance Report by <span className="text-green-400">AgroEdge...</span>
             </h1>
             <div className="grid grid-cols-1 gap-4 mt-8 md:grid-cols-3 ">
               <div className="flex items-center justify-center gap-4 p-4 transition-colors duration-300 border border-green-300 rounded-lg group bg-gray-50 hover:bg-green-300 hover:text-white">
