@@ -1,15 +1,14 @@
 "use client";
 
 import React from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { FaRegIdCard } from "react-icons/fa6";
 import { LuCircleUserRound } from "react-icons/lu";
 import { TbReportAnalytics } from "react-icons/tb";
 import { HiHome } from "react-icons/hi2";
-import { HiDownload, HiOutlineCurrencyDollar } from "react-icons/hi"; 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
+import { HiDownload, HiOutlineCurrencyDollar } from "react-icons/hi";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 // Sample data to show how it would look
 const sampleReport = {
@@ -76,70 +75,72 @@ const sampleReport = {
 
 export default function FarmerReportDemo() {
   // Function to handle downloading the report as PDF
-  
+
   const handleDownloadReport = () => {
-      console.log("Downloading report...");
-      const reportElement = document.querySelector('.relative.flex.flex-col.p-4') as HTMLElement;
-      
-      if (!reportElement) {
-        console.error("Report element not found");
-        return;
-      }
-            
-      html2canvas(reportElement, {
-        
-        scale: 2, 
-        useCORS: true, 
-        logging: false, 
-        height: reportElement.scrollHeight,
-        windowHeight: reportElement.scrollHeight
-      }).then(canvas => {
+    console.log("Downloading report...");
+    const reportElement = document.querySelector(
+      ".relative.flex.flex-col.p-4"
+    ) as HTMLElement;
+
+    if (!reportElement) {
+      console.error("Report element not found");
+      return;
+    }
+
+    html2canvas(reportElement, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      height: reportElement.scrollHeight,
+      windowHeight: reportElement.scrollHeight,
+    })
+      .then((canvas) => {
         // Create a new jsPDF instance
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
+        const pdf = new jsPDF("p", "mm", "a4");
+
         // Calculate dimensions
-        const imgWidth = 210; 
-        const pageHeight = 297; 
+        const imgWidth = 210;
+        const pageHeight = 297;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
+
         // Get the image data from canvas
-        const imgData = canvas.toDataURL('image/png');
-        
+        const imgData = canvas.toDataURL("image/png");
+
         // Add image to PDF
         let heightLeft = imgHeight;
         let position = 0;
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
-        
+
         // Add new pages if the content overflows a single page
         while (heightLeft >= 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
         }
-        
+
         // Create a filename with farmer name and ID
         const filename = `${sampleReport.farmerName}_${sampleReport.farmerId}_Report.pdf`;
-        
+
         // Save the PDF
         pdf.save(filename);
-        
+
         console.log("Report downloaded successfully");
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.error("Error generating PDF:", error);
       });
-
   };
-//Function to handle route to prices page
-const router = useRouter();
-const handlePrices = () => {
-  router.push('/price');
-  console.log("Redirecting to prices page...");
-};
+  //Function to handle route to prices page
+  const router = useRouter();
+  const handlePrices = () => {
+    router.push("/price");
+    console.log("Redirecting to prices page...");
+  };
   // Function to handle returning to home
   const handleReturnHome = () => {
-    router.push('/');
+    router.push("/");
     console.log("Returning to home...");
   };
 
@@ -242,20 +243,20 @@ const handlePrices = () => {
               ))}
             </ul>
           </div>
-
           {/* Button container with absolute positioning */}
+
           <div className="absolute bottom-0 right-0 flex pb-4 pr-4 space-x-4">
-          <button
+            <button
               onClick={handleDownloadReport}
               className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-green-400 rounded-md hover:bg-green-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-300"
             >
               <HiDownload className="w-5 h-5 mr-2" />
               Download Report
             </button>
-                        
+
             <button
               onClick={handlePrices}
-              className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-indigo-300 rounded-md hover:bg-indigo-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-green-300"
+              className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-indigo-300 rounded-md hover:bg-indigo-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
             >
               <HiOutlineCurrencyDollar className="w-5 h-5 mr-2" />
               See vegetable prices

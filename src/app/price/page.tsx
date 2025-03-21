@@ -81,21 +81,21 @@ export default function VegetablePriceForecasting() {
           inactiveZone={0.01}
         />
         <div className="flex flex-col items-center justify-center space-y-4">
-          <h1 className="text-3xl font-bold text-center text-gray-800">
+          <h1 className="pt-12 text-3xl font-bold text-center text-gray-800">
             Vegetable Price Forecast By{" "}
             <span className="text-green-400"> AgroEdge...</span>
           </h1>
-          <p className="text-center text-gray-600">
+          <p className="pb-8 text-center text-gray-600">
             Weekly price prediction for vegetables in Sri Lanka
           </p>
           <ForecastCard data={forecastData} />
 
           {/* //buttons here */}
 
-          <div className="absolute bottom-0 right-0 flex pb-4 pr-4 space-x-4">
+          <div className="absolute bottom-0 right-0 flex pb-8 pr-4 space-x-4">
             <button
               onClick={handleReturnReportpg}
-              className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-blue-400 rounded-md hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="flex items-center px-4 py-2 text-black transition-colors duration-300 bg-white border border-indigo-300 rounded-md hover:bg-indigo-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
             >
               <GiBackForth className="w-5 h-5 mr-2" />
               Return To Report
