@@ -9,7 +9,7 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({ user }: UserProfileProps) {
-  const tags = ["Corn", "Soybeans", "Sustainable", "Organic"]; // Hardcoded for now since not in DB
+  const tags = ["Leeks", "Carrot", "Sustainable", "Organic"]; // Hardcoded for now since not in DB
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function UserProfile({ user }: UserProfileProps) {
           />
         </Avatar>
         <h2 className="text-xl font-bold">{user.name}</h2>
-        <p className="text-muted-foreground">Iowa, USA</p> {/* Hardcoded since not in DB */}
+        <p className="text-muted-foreground">NuwaraEliya, SL</p> {/* Hardcoded since not in DB */}
 
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {tags.map((tag) => (

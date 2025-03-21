@@ -503,6 +503,7 @@ export default function CommunityHub() {
               </div>
             ) : (
               <div className="space-y-6">
+                {/* Render messages directly (oldest first, newest last) */}
                 {filteredMessages.map((message) => (
                   <div key={message.id} className="space-y-2">
                     <div
