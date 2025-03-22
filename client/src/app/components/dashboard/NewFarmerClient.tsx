@@ -25,9 +25,9 @@ export default function NewFarmerClient() {
 
   return (
     <div className="p-5">
-      <div className="mb-6 flex justify-center">
+      <div className="mb-10 flex text-center justify-center ml-80">
         <div className="w-full max-w-md">
-          <Label htmlFor="district">District</Label>
+          <Label className="text-center ml-15" htmlFor="district">District</Label>
           <div className="pt-2">
             <Select value={district} onValueChange={setDistrict}>
               <SelectTrigger id="district" className="bg-green-50">
@@ -41,6 +41,13 @@ export default function NewFarmerClient() {
             </Select>
           </div>
         </div>
+      </div>
+      <div>
+        <img
+          src="/images/coverc.jpg"
+          alt="Farmer watering crops in a green field"
+          className=" inset-0 h-100 w-full object-cover rounded-2xl"
+        />
       </div>
 
       {district && (
