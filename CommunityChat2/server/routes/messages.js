@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
       'SELECT m.*, p.username, p.profile_picture ' +
       'FROM comm_messages m ' +
       'JOIN comm_profile p ON m.user_id = p.user_id ' +
-      'ORDER BY m.created_at ASC' // Changed to ASC for chronological order (oldest first)
+      'ORDER BY m.created_at ASC' // ASC for chronological order (oldest first)
     );
     const messages = result.rows;
 
@@ -74,7 +74,7 @@ router.get('/:messageId/replies', async (req, res) => {
   }
 });
 
-// Upload image to PostgreSQL
+// Upload image to database and return Base64 string
 router.post('/upload-image', upload.single('image'), async (req, res) => {
   try {
     const file = req.file;
