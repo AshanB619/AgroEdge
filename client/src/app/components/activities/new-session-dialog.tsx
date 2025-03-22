@@ -26,6 +26,7 @@ interface NewSessionDialogProps {
 export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps ) {
     const router = useRouter ()
     const [isSubmitting, setIsSubmitting] = useState (false)
+    const[error, setError]= useState("")
     const [formData , setFormData] = useState ({
         farm_size: "",
         farm_type: "",
@@ -56,19 +57,33 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsSubmitting(true)
+        setError ("")
     
-        try {
-          // In a real app, this would be an API call to create a new session
-          await new Promise((resolve) => setTimeout(resolve, 1500))
-    
-          // Redirect to the new session page
-          router.push("/activities")
-          onOpenChange(false)
-        } catch (error) {
-          console.error("Error creating session:", error)
-        } finally {
-          setIsSubmitting(false)
-        }
+       try{
+            const response = await fetch ("api/sessions", {
+                method: "POST",
+                headers:{
+                    contentType:"application/json",
+                },
+                body:JSON.stringify(formData),
+            })
+
+            const data = await response.json()
+
+            if(!response.ok){
+                throw new  Error (data.message || "Failed to create session")
+            }
+
+            router.push ("/activities")
+            onOpenChange(false)
+       } 
+       catch(error){
+            console.error("Failed to create session", error)
+            setError(error instanceof Error ? error.message : "An unexpected error occurred")
+       }
+       finally{
+        setIsSubmitting(false)
+       }
     }
 
     return (
@@ -181,31 +196,7 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
                         </div>
 
 
-                        {/* <div className ="space-y-2">
-                            <Label htmlFor="seed_type">Seed Type</Label>
-                            <Select onValueChange ={(value) => handleSelectChange("seed_type", value)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select seed type"/>
-                                </SelectTrigger>
-                                <SelectContent className ="bg-green-50">
-                                    <SelectItem value="certified">Certified</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="organic">Organic</SelectItem>
-                                    <SelectItem value="traditional">Traditional</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div> */}
 
-                        {/* <div className ="space-y-2">
-                            <Label htmlFor ="actual_harvest">Actual Harvest (kg)</Label>
-                            <Input
-                                id="actual_harvest"
-                                name="actual_harvest"
-                                value={formData.actual_harvest}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div> */}
 
                         
                         <div className ="space-y-2">
@@ -269,21 +260,7 @@ export function NewSessionDialog ({ open, onOpenChange } : NewSessionDialogProps
                             <Input id="soil_ph" name="soil_ph" value={formData.soil_ph} onChange={handleChange} required />
                         </div>
 
-                        {/* <div className ="space-y-2">
-                            <Label htmlFor ="seed_variety">Seed Variety</Label>
-                            <Input
-                                id="seed_variety"
-                                name="seed_variety"
-                                value={formData.seed_variety}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div> */}
-
-                        
-
-                        {/* Soil Details */}
-
+    
                         
                         
                     </div>
