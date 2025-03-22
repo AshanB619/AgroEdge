@@ -73,6 +73,13 @@ export function EndSessionDialog({ open, onOpenChange, sessionId }: EndSessionDi
               <DialogTitle>End Crop Session</DialogTitle>
               <DialogDescription>Enter the harvest details to complete this crop session.</DialogDescription>
             </DialogHeader>
+
+            {error && (
+                    <Alert variant="destructive" className="mb-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                )}
     
             <div className="flex items-center gap-2 p-3 bg-amber-50 rounded-md text-amber-800 mb-4">
               <AlertTriangle className="h-5 w-5 text-amber-500" />
