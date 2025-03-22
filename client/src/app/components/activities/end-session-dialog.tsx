@@ -3,9 +3,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertTriangle, Loader2 } from "lucide-react"
+import { AlertTriangle, Loader2,AlertCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+
 
 
 interface EndSessionDialogProps {
@@ -17,6 +19,7 @@ interface EndSessionDialogProps {
 export function EndSessionDialog({ open, onOpenChange, sessionId }: EndSessionDialogProps) {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [error, setError] = useState("")
     const [formData, setFormData] = useState({
         actual_hrvest: "",
         
@@ -36,14 +39,28 @@ export function EndSessionDialog({ open, onOpenChange, sessionId }: EndSessionDi
         setIsSubmitting(true)
     
         try {
-          // In a real app, this would be an API call to end the session
-          await new Promise((resolve) => setTimeout(resolve, 1500))
-    
-          // Redirect to the activities page
-          router.push("/activities")
-          onOpenChange(false)
+          const response = await fetch(`/api/sessions/${sessionId}/end`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        
+        const data = await response.json()
+            
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to end session")
+            }
+            router.push("/activities")
+            router.refresh()
+            onOpenChange(false)
+
+            
         } catch (error) {
           console.error("Error ending session:", error)
+          setError(error instanceof Error ? error.message : "An unexpected error occurred")
+
         } finally {
           setIsSubmitting(false)
         }
