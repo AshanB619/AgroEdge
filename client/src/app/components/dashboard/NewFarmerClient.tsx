@@ -42,13 +42,7 @@ export default function NewFarmerClient() {
           </div>
         </div>
       </div>
-      <div>
-        <img
-          src="/images/coverc.jpg"
-          alt="Farmer watering crops in a green field"
-          className=" inset-0 h-100 w-full object-cover rounded-2xl"
-        />
-      </div>
+      
 
       {district && (
         <>
@@ -66,6 +60,14 @@ export default function NewFarmerClient() {
           </div>
         </>
       )}
+      <div>
+        <img
+          src="/images/coverc.jpg"
+          alt="Farmer watering crops in a green field"
+          className=" inset-0 h-100 w-full object-cover rounded-2xl"
+        />
+      </div>
     </div>
+    
   );
 }

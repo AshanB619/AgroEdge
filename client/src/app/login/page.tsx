@@ -154,21 +154,21 @@ export default function LoginPage() {
                 type="button"
                 className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
-                <img className="h-5 w-5 mr-2" src="/google.svg" alt="Google logo" />
+                <img className="h-5 w-5 mr-2" src="/images/google.png" alt="Google logo" />
                 <span>Sign up with Google</span>
               </button>
               <button
                 type="button"
                 className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
-                <img className="h-5 w-5 mr-2" src="/facebook.svg" alt="Facebook logo" />
+                <img className="h-5 w-5 mr-2" src="/images/facebook.png" alt="Facebook logo" />
                 <span>Sign up with Facebook</span>
               </button>
             </div>
 
             <p className="text-center text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
+              <Link href="/signup" className="font-medium text-green-600 hover:text-green-500">
                 Sign up
               </Link>
             </p>
@@ -177,8 +177,8 @@ export default function LoginPage() {
       </div>
       <div className ="hidden lg:flex lg:w-1/2 bg-green-50 ">
         <div className="flex flex-col justify-center px-12 text-white">
-          <div className="flex flex-col justify-center px-12 py-6 h-full">
-            <img src="/images/farmerlg.jpeg" alt="Login"  className="rounded-3xl max-w-lg max-h-screen shadow-2xl shadow-black" />
+          <div className="flex flex-col justify-center px-12 py-10 h-full">
+            <img src="/images/login.jpg" alt="Login"  className="rounded-3xl  max-h-screen shadow-2xl shadow-black" />
           </div>
         </div>
       </div>
