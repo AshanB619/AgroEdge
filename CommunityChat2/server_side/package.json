@@ -8,5 +8,17 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.14.1",
     "socket.io": "^4.8.1"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "lint": "eslint . --ext .js",
+    "test": "mocha 'tests/**/*.test.js' --exit",
+    "migrate": "node ./migrate.js"
+  },
+  "devDependencies": {
+    "chai": "^5.2.0",
+    "eslint": "^9.23.0",
+    "mocha": "^11.1.0",
+    "supertest": "^7.1.0"
   }
 }
