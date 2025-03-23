@@ -40,6 +40,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { Router, useRouter } from "next/router";
+import Link from "next/link";
 
 // Define TypeScript interface for the farmer profile data
 interface FarmerProfile {
@@ -86,7 +87,7 @@ export default function FarmerProfilePage() {
   const [error, setError] = useState<string | null>(null);
 
   // Hardcoded userId for now; replace with dynamic value after authentication
-  const userId = "token";
+  const userId = "005a8061c6";
 
   // useEffect(() => {
   //   const fetchProfile = async () => {
@@ -202,15 +203,19 @@ export default function FarmerProfilePage() {
               </div>
             </div>
             <div className="flex gap-2 mt-4 md:mt-0">
-              <Button className="flex items-center gap-2">
-                <Edit className="h-4 w-4" />
-                Edit Profile
-              </Button>
+              <Link href="/farmer-report">
+                <Button className="flex items-center gap-2 bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800">
+                  <Edit className="h-4 w-4 bg-green-400 hover:bg-green-500 hover:font-bold hover:text-green-800" />
+                  View Report
+                </Button>
+              </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button>
-                    <Settings className="h-5 w-5" />
-                  </Button>
+                 
+                    <Button  className= "bg-green-600 hover:bg-green-300 hover:font-bold hover:text-green-800">
+                      <Settings className="h-5 w-5 " />
+                    </Button>
+                  
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Profile Settings</DropdownMenuLabel>
@@ -345,7 +350,7 @@ export default function FarmerProfilePage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full bg-green-400 hover:bg-green-300 hover:font-bold hover:text-green-800">
+                <Button className="w-full bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800">
                   View All Achievements
                 </Button>
               </CardFooter>
@@ -372,7 +377,7 @@ export default function FarmerProfilePage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full bg-green-400 hover:bg-green-300 hover:font-bold hover:text-green-800">
+                <Button className="w-full bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800">
                   View All Activity
                 </Button>
               </CardFooter>
