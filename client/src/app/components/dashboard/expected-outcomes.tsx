@@ -19,7 +19,7 @@ export function ExpectedOutcomes({ className, district }: ExpectedOutcomesProps)
     if (!district) return;
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/best-farmers/${district}`);
+        const response = await axios.get(`http://localhost:5001/api/best-farmers/${district}`);
         const topFarmers = response.data.topFarmers;
         const avgActual = topFarmers.reduce((sum: number, f: any) => sum + f.actual_harvest, 0) / topFarmers.length;
         const avgExpected = topFarmers.reduce((sum: number, f: any) => sum + f.expected_harvest, 0) / topFarmers.length || avgActual * 0.8; // Fallback
