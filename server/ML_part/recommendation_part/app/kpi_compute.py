@@ -13,3 +13,20 @@ def z_score_normalization(values, inverse=False):
     if inverse:
         z_scores = -z_scores
     return 50 + (z_scores * 10)
+
+# Main function to calculate and store normalized KPIs for a given session
+def compute_all_normalized_kpis(farm_id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    # Get current session data
+    session_query = """
+    SELECT id, crop_type, farm_size, actual_harvest, seed_quantity,
+           water_usage, labor_hours, seed_cost, irrigation_cost, labor_wages
+    FROM sessions
+    WHERE id = %s
+    """
+    current_df = pd.read_sql(session_query, conn, params=(farm_id,))
+    if current_df.empty:
+        return {"error": "Farm session not found"}
+    crop_type = current_df.iloc[0]["crop_type"]
