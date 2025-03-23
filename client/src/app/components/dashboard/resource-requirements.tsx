@@ -23,7 +23,7 @@ export function ResourceRequirements({ className, district, farmSize, soilType }
     const fetchResources = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:5000/api/best-farmers/${district}`, {
+        const response = await axios.get(`http://localhost:5001/api/best-farmers/${district}`, {
           params: { farm_size: farmSize, soil_type: soilType },
         });
         const topFarmers = response.data.topFarmers;
