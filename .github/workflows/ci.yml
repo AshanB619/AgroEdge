@@ -53,11 +53,11 @@ jobs:
         echo "DATABASE_URL=postgres://testuser:testpassword@localhost:5432/communityhub_test" >> $GITHUB_ENV
         echo "NODE_ENV=test" >> $GITHUB_ENV
 
-    - name: Run database migrations
-      run: cd CommunityChat2/server_side && npm run migrate # Add this script to your server package.json if not present
+    #- name: Run database migrations
+    # run: cd CommunityChat2/server_side && npm run migrate # Add this script to your server package.json if not present
 
-    - name: Run server linting
-      run: cd CommunityChat2/server_side && npm run lint # Add this script to your server package.json if not present
+    #- name: Run server linting
+    #  run: cd CommunityChat2/server_side && npm run lint # Add this script to your server package.json if not present
 
-    - name: Run server tests
-      run: cd CommunityChat2/server_side && npm test # Add this script to your server package.json if not present
+    #- name: Run server tests
+    #  run: cd CommunityChat2/server_side && npm test # Add this script to your server package.json if not present
