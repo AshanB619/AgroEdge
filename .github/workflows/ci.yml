@@ -61,3 +61,25 @@ jobs:
 
     #- name: Run server tests
     #  run: cd CommunityChat2/server_side && npm test # Add this script to your server package.json if not present
+  securityCheck:
+    name: Security Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: check for security
+        run: |
+          echo "Checking for security vulnerabilities..."
+          sleep 5s;
+          echo "Running security check... 1"
+          sleep 5s;
+          echo "Running security check... 2"
+          sleep 5s;
+
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest    
+    needs: [build-and-test, securityCheck]
+    steps:
+      - name: Deployment
+        run: |
+          echo "Deploying..."
+          echo "Deployment completed successfully."
