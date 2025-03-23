@@ -102,6 +102,39 @@ const Session = sequelize.define('Session', {
     allowNull: true
   },
   
+  yield_per_perch : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  cost_per_kg : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  fertilizer_efficiency : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  pesticide_efficiency : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  water_efficiency : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  labor_efficiency : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  seed_efficiency : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  final_performance_score : {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  
   
   
   
