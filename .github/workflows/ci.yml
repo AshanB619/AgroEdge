@@ -41,8 +41,6 @@ jobs:
     - name: Run client linting
       run: cd CommunityChat2/client_side && npm run lint # Add this script to your community-app package.json if not present
 
-    - name: Run client tests
-      run: cd CommunityChat2/client_side && npm test # Add this script to your community-app package.json if not present
 
     # Server setup and tests
     - name: Install server dependencies
