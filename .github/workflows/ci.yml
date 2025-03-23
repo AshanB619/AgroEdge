@@ -36,14 +36,10 @@ jobs:
 
     # Client (community-app) setup and tests
     - name: Install client dependencies
-      run: 
-        echo "Installing client dependencies"
-        cd CommunityChat2/client_side && npm install
+      run: cd CommunityChat2/client_side && npm install
 
     - name: Run client linting
-      run: 
-        echo "Running client linting" 
-        cd CommunityChat2/client_side && npm run lint # Add this script to your community-app package.json if not present
+      run: cd CommunityChat2/client_side && npm run lint # Add this script to your community-app package.json if not present
 
     #- name: Run client tests
     #  run: cd CommunityChat2/client_side && npm test # Add this script to your community-app package.json if not present
