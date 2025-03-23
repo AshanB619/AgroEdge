@@ -36,17 +36,17 @@ jobs:
 
     # Client (community-app) setup and tests
     - name: Install client dependencies
-      run: cd client_side && npm install
+      run: cd CommunityChat2/client_side && npm install
 
     - name: Run client linting
-      run: cd client_side && npm run lint # Add this script to your community-app package.json if not present
+      run: cd CommunityChat2/client_side && npm run lint # Add this script to your community-app package.json if not present
 
     - name: Run client tests
-      run: cd client_side && npm test # Add this script to your community-app package.json if not present
+      run: cd CommunityChat2/client_side && npm test # Add this script to your community-app package.json if not present
 
     # Server setup and tests
     - name: Install server dependencies
-      run: cd server_side && npm install
+      run: cd CommunityChat2/server_side && npm install
 
     - name: Set up environment variables for server
       run: |
@@ -54,10 +54,10 @@ jobs:
         echo "NODE_ENV=test" >> $GITHUB_ENV
 
     - name: Run database migrations
-      run: cd server_side && npm run migrate # Add this script to your server package.json if not present
+      run: cd CommunityChat2/server_side && npm run migrate # Add this script to your server package.json if not present
 
     - name: Run server linting
-      run: cd server_side && npm run lint # Add this script to your server package.json if not present
+      run: cd CommunityChat2/server_side && npm run lint # Add this script to your server package.json if not present
 
     - name: Run server tests
-      run: cd server_cide && npm test # Add this script to your server package.json if not present
+      run: cd CommunityChat2/server_side && npm test # Add this script to your server package.json if not present
