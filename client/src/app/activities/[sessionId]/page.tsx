@@ -145,24 +145,24 @@ export default function SessionDetailPage() {
 
         {sessionData.status === "active" && (
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button variant="outline" onClick={() => setIsEndSessionDialogOpen(true)}>
+            <Button className ="bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800 text-green-50" variant="outline" onClick={() => setIsEndSessionDialogOpen(true)}>
               End Session
             </Button>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList className="w-full">
-              <TabsTrigger value="overview" className="flex-1">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+        <div className="lg:col-span-2 ">
+          <Tabs defaultValue="overview" className="space-y-4 ">
+            <TabsList className="w-full bg-green-100">
+              <TabsTrigger value="overview" className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="daily-input" className="flex-1">
+              <TabsTrigger value="daily-input" className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
                 Daily Input
               </TabsTrigger>
-              <TabsTrigger value="history" className="flex-1">
+              <TabsTrigger value="history" className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
                 Input History
               </TabsTrigger>
             </TabsList>
@@ -178,10 +178,10 @@ export default function SessionDetailPage() {
                     <div>
                       <h3 className="text-lg font-medium mb-2">Progress</h3>
                       <div className="flex justify-between text-sm mb-1">
-                        <span>Overall Progress</span>
+                        <span >Overall Progress</span>
                         <span>{sessionData.progress}%</span>
                       </div>
-                      <Progress value={sessionData.progress} className="h-2" />
+                      <Progress value={sessionData.progress} className="h-2 bg-green-100" />
                       <div className="flex justify-between text-xs text-gray-500 mt-1">
                         <span>Started: {new Date(sessionData.startDate).toLocaleDateString()}</span>
                         <span>
