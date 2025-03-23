@@ -1,63 +1,63 @@
-# name: Community Hub CI
+name: Community Hub CI
 
-# on:
-#   push:
-#     branches: [ "Anjana" ] # Replace with your branch name, e.g., feature/community-hub
-#   pull_request:
-#     branches: [ "Anjana" ]
+on:
+  push:
+    branches: [ "Anjana" ] # Replace with your branch name, e.g., feature/community-hub
+  pull_request:
+    branches: [ "Anjana" ]
 
-# jobs:
-#   build-and-test:
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
 
-#     services:
-#       postgres:
-#         image: postgres:latest
-#         env:
-#           POSTGRES_USER: testuser
-#           POSTGRES_PASSWORD: testpassword
-#           POSTGRES_DB: communityhub_test
-#         ports:
-#           - 5432:5432
-#         options: >-
-#           --health-cmd pg_isready
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: communityhub_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v4
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-#     - name: Set up Node.js
-#       uses: actions/setup-node@v4
-#       with:
-#         node-version: '22.11.0' # Adjust to the Node.js version your project uses
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.11.0' # Adjust to the Node.js version your project uses
 
-#     # Client (community-app) setup and tests
-#     - name: Install client dependencies
-#       run: cd community-app && npm install
+    # Client (community-app) setup and tests
+    - name: Install client dependencies
+      run: cd client_side && npm install
 
-#     - name: Run client linting
-#       run: cd community-app && npm run lint # Add this script to your community-app package.json if not present
+    - name: Run client linting
+      run: cd client_side && npm run lint # Add this script to your community-app package.json if not present
 
-#     - name: Run client tests
-#       run: cd community-app && npm test # Add this script to your community-app package.json if not present
+    - name: Run client tests
+      run: cd client_side && npm test # Add this script to your community-app package.json if not present
 
-#     # Server setup and tests
-#     - name: Install server dependencies
-#       run: cd server && npm install
+    # Server setup and tests
+    - name: Install server dependencies
+      run: cd server_side && npm install
 
-#     - name: Set up environment variables for server
-#       run: |
-#         echo "DATABASE_URL=postgres://testuser:testpassword@localhost:5432/communityhub_test" >> $GITHUB_ENV
-#         echo "NODE_ENV=test" >> $GITHUB_ENV
+    - name: Set up environment variables for server
+      run: |
+        echo "DATABASE_URL=postgres://testuser:testpassword@localhost:5432/communityhub_test" >> $GITHUB_ENV
+        echo "NODE_ENV=test" >> $GITHUB_ENV
 
-#     - name: Run database migrations
-#       run: cd server && npm run migrate # Add this script to your server package.json if not present
+    - name: Run database migrations
+      run: cd server_side && npm run migrate # Add this script to your server package.json if not present
 
-#     - name: Run server linting
-#       run: cd server && npm run lint # Add this script to your server package.json if not present
+    - name: Run server linting
+      run: cd server_side && npm run lint # Add this script to your server package.json if not present
 
-#     - name: Run server tests
-#       run: cd server && npm test # Add this script to your server package.json if not present
+    - name: Run server tests
+      run: cd server_cide && npm test # Add this script to your server package.json if not present
