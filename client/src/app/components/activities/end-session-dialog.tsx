@@ -93,7 +93,7 @@ export function EndSessionDialog({ open, onOpenChange, sessionId, onSessionEnded
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button className ="bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800" type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -4,6 +4,7 @@ const { sequelize, testConnection } = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const kpiRoutes = require('./routes/kpiRoutes');
 
 // Load environment variables
 require('dotenv').config();
@@ -24,6 +25,8 @@ testConnection();
 app.use('/api/auth', authRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/uploads', uploadRoutes);
+app.use('/api/kpi', kpiRoutes);
+
 
 // Root route
 app.get('/', (req, res) => {

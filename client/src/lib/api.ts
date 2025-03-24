@@ -38,4 +38,9 @@ api.interceptors.response.use(
   }
 );
 
+export const fetchFarmerReport = async (sessionId: string) => {
+  const response = await api.get(`/kpi/report/${sessionId}`);
+  return response.data;
+};
+
 export default api;

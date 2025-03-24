@@ -175,20 +175,20 @@ export function DailyInputForm({ sessionId, onInputAdded }: DailyInputFormProps)
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4">
-            <TabsTrigger value="fertilizer" className="flex items-center gap-2">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 bg-green-100">
+            <TabsTrigger value="fertilizer" className="flex items-center gap-2 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
               <Sprout className="h-4 w-4" />
-              <span className="hidden md:inline">Fertilizer</span>
+              <span className="hidden md:inline ">Fertilizer</span>
             </TabsTrigger>
-            <TabsTrigger value="pesticide" className="flex items-center gap-2">
+            <TabsTrigger value="pesticide" className="flex items-center gap-2 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
               <AlertTriangle className="h-4 w-4" />
               <span className="hidden md:inline">Pesticide</span>
             </TabsTrigger>
-            <TabsTrigger value="irrigation" className="flex items-center gap-2">
+            <TabsTrigger value="irrigation" className="flex items-center gap-2 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
               <Droplet className="h-4 w-4" />
               <span className="hidden md:inline">Irrigation</span>
             </TabsTrigger>
-            <TabsTrigger value="labor" className="flex items-center gap-2">
+            <TabsTrigger value="labor" className="flex items-center gap-2 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
               <Users className="h-4 w-4" />
               <span className="hidden md:inline">Labor</span>
             </TabsTrigger>
@@ -408,7 +408,7 @@ export function DailyInputForm({ sessionId, onInputAdded }: DailyInputFormProps)
           </form>
 
           <div className="mt-6">
-            <Button type="submit" disabled={isSubmitting} onClick={handleSubmit}>
+            <Button className="bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800" type="submit" disabled={isSubmitting} onClick={handleSubmit}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
