@@ -34,19 +34,19 @@ export default function CommunityHub() {
     const fetchData = async () => {
       try {
         // Fetch current user
-        const userResponse = await fetch("http://localhost:5000/api/profile");
+        const userResponse = await fetch("http://localhost:5003/api/profile");
         if (!userResponse.ok) throw new Error("Failed to fetch user profile");
         const userData: User = await userResponse.json();
         setCurrentUser(userData);
 
         // Fetch all users
-        const usersResponse = await fetch("http://localhost:5000/api/users");
+        const usersResponse = await fetch("http://localhost:5003/api/users");
         if (!usersResponse.ok) throw new Error("Failed to fetch users");
         const usersData: User[] = await usersResponse.json();
         setUsers(usersData);
 
         // Fetch all messages
-        const messagesResponse = await fetch("http://localhost:5000/api/messages");
+        const messagesResponse = await fetch("http://localhost:5003/api/messages");
         if (!messagesResponse.ok) throw new Error("Failed to fetch messages");
         const messagesData: Message[] = await messagesResponse.json();
         // Initialize replies as an empty array if undefined
@@ -65,7 +65,7 @@ export default function CommunityHub() {
 
   // Set up Socket.IO connection
   useEffect(() => {
-    socketRef.current = io("http://localhost:5000");
+    socketRef.current = io("http://localhost:5003");
 
     socketRef.current.on("connect", () => {
       console.log("Connected to Socket.IO server");
@@ -174,7 +174,7 @@ export default function CommunityHub() {
       const fetchReplies = async () => {
         try {
           const response = await fetch(
-            `http://localhost:5000/api/messages/${selectedMessage.id}/replies`
+            `http://localhost:5003/api/messages/${selectedMessage.id}/replies`
           );
           if (!response.ok) throw new Error("Failed to fetch replies");
           const repliesData: Reply[] = await response.json();
@@ -205,7 +205,7 @@ export default function CommunityHub() {
       try {
         const formData = new FormData();
         formData.append("image", selectedImage);
-        const response = await fetch("http://localhost:5000/api/messages/upload-image", {
+        const response = await fetch("http://localhost:5003/api/messages/upload-image", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

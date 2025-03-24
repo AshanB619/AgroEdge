@@ -1,4 +1,3 @@
-// activities/[sessionId]/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Calendar, Leaf, AlertTriangle, Droplet, Users, Sprout } from "lucide-react";
+import { ArrowLeft, Calendar, Leaf, AlertTriangle, Sprout } from "lucide-react";
 
 import { InputHistoryList } from "@/app/components/activities/input-history-list";
 import { EndSessionDialog } from "@/app/components/activities/end-session-dialog";
@@ -33,6 +32,15 @@ type Session = {
   lastUpdated?: string;
   progress?: number;
   status: "active" | "completed";
+  finalScore?: number;
+  kpis?: {
+    [key: string]: {
+      score: number;
+      weight: number;
+      weighted_contribution: number;
+    };
+  };
+  recommendations?: string[];
 };
 
 export default function SessionDetailPage() {
@@ -43,14 +51,75 @@ export default function SessionDetailPage() {
   const [sessionData, setSessionData] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    console.log(sessionData)
+  }, [sessionData]);
+
   // Fetch session data from the backend
+  // const fetchSessionData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const sessionResponse = await api.get(`/sessions/${sessionId}`);
+  //     const session = sessionResponse.data.session;
+
+  //     const transformedSession: Session = {
+  //       id: session.id.toString(),
+  //       cropType: session.crop_type,
+  //       variety: session.veg_variety,
+  //       startDate: session.start_date,
+  //       expectedHarvestDate: new Date(session.start_date).setDate(
+  //         new Date(session.start_date).getDate() + 70
+  //       ),
+  //       farmSize: `${session.farm_size} acres`,
+  //       district: session.district,
+  //       expectedHarvest: `${session.expected_harvest} kg`,
+  //       seedSource: session.seed_source,
+  //       seedQuantity: `${session.seed_quantity} kg`,
+  //       seedCost: session.seed_cost.toString(),
+  //       soilType: session.soil_type || "N/A",
+  //       soilPh: session.soil_ph ? session.soil_ph.toString() : "N/A",
+  //       lastUpdated: new Date().toISOString().split("T")[0],
+  //       progress: Math.min(
+  //         100,
+  //         Math.round(
+  //           ((new Date().getTime() - new Date(session.start_date).getTime()) /
+  //             (1000 * 60 * 60 * 24)) /
+  //             70
+  //         ) * 100
+  //       ),
+  //       status: session.is_active ? "active" : "completed",
+  //     };
+
+  //     if (!session.is_active) {
+  //       const kpiResponse = await api.get(`/api/kpi/${sessionId}`);
+  //       const kpiData = kpiResponse.data;
+
+  //       transformedSession.finalScore = kpiData.final_score;
+  //       transformedSession.kpis = kpiData.kpis;
+  //       transformedSession.recommendations = kpiData.recommendations;
+  //     }
+
+  //     setSessionData(transformedSession);
+  //   } catch (error) {
+  //     console.error("Error fetching session data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchSessionData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/sessions/${sessionId}`);
-      const session = response.data.session;
-
-      // Transform backend data to match frontend expectations
+      console.log("Fetching session data for sessionId:", sessionId);
+      const sessionResponse = await api.get(`/sessions/${sessionId}`);
+      console.log("Session response:", sessionResponse.data);
+  
+      const session = sessionResponse.data.session;
+      if (!session) {
+        console.error("No session data returned from backend");
+        setSessionData(null);
+        return;
+      }
+  
       const transformedSession: Session = {
         id: session.id.toString(),
         cropType: session.crop_type,
@@ -58,7 +127,7 @@ export default function SessionDetailPage() {
         startDate: session.start_date,
         expectedHarvestDate: new Date(session.start_date).setDate(
           new Date(session.start_date).getDate() + 70
-        ), // Estimate expected harvest date (70 days after start)
+        ),
         farmSize: `${session.farm_size} acres`,
         district: session.district,
         expectedHarvest: `${session.expected_harvest} kg`,
@@ -67,7 +136,7 @@ export default function SessionDetailPage() {
         seedCost: session.seed_cost.toString(),
         soilType: session.soil_type || "N/A",
         soilPh: session.soil_ph ? session.soil_ph.toString() : "N/A",
-        lastUpdated: new Date().toISOString().split("T")[0], // For now, use current date
+        lastUpdated: new Date().toISOString().split("T")[0],
         progress: Math.min(
           100,
           Math.round(
@@ -75,13 +144,30 @@ export default function SessionDetailPage() {
               (1000 * 60 * 60 * 24)) /
               70
           ) * 100
-        ), // Calculate progress based on 70-day duration
+        ),
         status: session.is_active ? "active" : "completed",
       };
 
+      console.log(!session.is_active)
+  
+      if (!session.is_active) {
+        console.log("Fetching KPI data for sessionId:", sessionId);
+        const kpiResponse = await api.get(`kpi/report/${sessionId}`);
+        console.log("KPI response:", kpiResponse.data);
+  
+        const kpiData = kpiResponse.data;
+        transformedSession.finalScore = kpiData.final_score;
+        transformedSession.kpis = kpiData.kpis;
+        transformedSession.recommendations = kpiData.recommendations;
+      }
+  
       setSessionData(transformedSession);
     } catch (error) {
       console.error("Error fetching session data:", error);
+      if (error?.response) {
+        console.error("Response data:", error?.response.data);
+        console.error("Response status:", error.response.status);
+      }
     } finally {
       setLoading(false);
     }
@@ -91,10 +177,9 @@ export default function SessionDetailPage() {
     fetchSessionData();
   }, [sessionId]);
 
-  // Callback to refresh session data after ending the session
   const handleSessionEnded = () => {
     fetchSessionData();
-    router.push("/activities"); // Redirect to Activities page after ending the session
+    router.push("/activities");
   };
 
   if (loading) {
@@ -144,25 +229,46 @@ export default function SessionDetailPage() {
         </div>
 
         {sessionData.status === "active" && (
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button className ="bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800 text-green-50" variant="outline" onClick={() => setIsEndSessionDialogOpen(true)}>
+          <div className="flex flex-col-2 sm:flex-row gap-3">
+            <Button
+              className="bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800 text-green-50"
+              variant="outline"
+              onClick={() => setIsEndSessionDialogOpen(true)}
+            >
               End Session
             </Button>
+            <Link href={`/activities/${sessionId}`}>
+              <Button
+                className="bg-green-500 hover:bg-green-300 hover:font-bold hover:text-green-800 text-green-50"
+                variant="outline"
+              >
+                View Report
+              </Button>
+            </Link>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
-        <div className="lg:col-span-2 ">
-          <Tabs defaultValue="overview" className="space-y-4 ">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Tabs defaultValue="overview" className="space-y-4">
             <TabsList className="w-full bg-green-100">
-              <TabsTrigger value="overview" className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
+              <TabsTrigger
+                value="overview"
+                className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm"
+              >
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="daily-input" className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
+              <TabsTrigger
+                value="daily-input"
+                className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm"
+              >
                 Daily Input
               </TabsTrigger>
-              <TabsTrigger value="history" className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm">
+              <TabsTrigger
+                value="history"
+                className="flex-1 data-[state=active]:bg-green-400 data-[state=active]:shadow-sm"
+              >
                 Input History
               </TabsTrigger>
             </TabsList>
@@ -178,7 +284,7 @@ export default function SessionDetailPage() {
                     <div>
                       <h3 className="text-lg font-medium mb-2">Progress</h3>
                       <div className="flex justify-between text-sm mb-1">
-                        <span >Overall Progress</span>
+                        <span>Overall Progress</span>
                         <span>{sessionData.progress}%</span>
                       </div>
                       <Progress value={sessionData.progress} className="h-2 bg-green-100" />
@@ -304,61 +410,48 @@ export default function SessionDetailPage() {
                   </div>
                 </div>
 
-                {/* Recent Activities and other sections can be updated to fetch real data */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium">Recent Activities</h3>
+                {sessionData.status === "completed" && sessionData.finalScore && (
+                  <div className="bg-purple-50 p-3 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <Sprout className="h-5 w-5 text-purple-600" />
+                      <span className="text-sm font-medium">Final Score</span>
+                    </div>
+                    <p className="text-2xl font-bold mt-1">{sessionData.finalScore.toFixed(2)}</p>
+                  </div>
+                )}
+
+                {sessionData.status === "completed" && sessionData.kpis && (
                   <div className="space-y-2">
-                    <div className="flex items-start gap-2 p-2 bg-gray-50 rounded-md">
-                      <Droplet className="h-4 w-4 text-blue-500 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium">Irrigation</p>
-                        <p className="text-xs text-gray-500">2000 liters applied</p>
-                        <p className="text-xs text-gray-500">Today</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2 p-2 bg-gray-50 rounded-md">
-                      <Sprout className="h-4 w-4 text-green-500 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium">Fertilizer</p>
-                        <p className="text-xs text-gray-500">50kg NPK applied</p>
-                        <p className="text-xs text-gray-500">Yesterday</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-2 p-2 bg-gray-50 rounded-md">
-                      <Users className="h-4 w-4 text-orange-500 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium">Labor</p>
-                        <p className="text-xs text-gray-500">8 hours of work</p>
-                        <p className="text-xs text-gray-500">2 days ago</p>
-                      </div>
+                    <h3 className="text-sm font-medium">KPI Breakdown</h3>
+                    <div className="space-y-2">
+                      {Object.entries(sessionData.kpis).map(([kpiName, kpiDetails]) => (
+                        <div key={kpiName} className="flex items-start gap-2 p-2 bg-gray-50 rounded-md">
+                          <Leaf className="h-4 w-4 text-green-500 mt-0.5" />
+                          <div>
+                            <p className="text-sm font-medium">{kpiName}</p>
+                            <p className="text-xs text-gray-500">Score: {kpiDetails.score.toFixed(2)}</p>
+                            <p className="text-xs text-gray-500">Weight: {kpiDetails.weight.toFixed(1)}%</p>
+                            <p className="text-xs text-gray-500">
+                              Contribution: {kpiDetails.weighted_contribution.toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
+                )}
 
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium">Alerts</h3>
-                  <div className="flex items-start gap-2 p-2 bg-red-50 rounded-md">
-                    <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium">Irrigation Due</p>
-                      <p className="text-xs text-gray-500">Recommended to irrigate within 2 days</p>
-                    </div>
+                {sessionData.status === "completed" && sessionData.recommendations && (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">Recommendations</h3>
+                    {sessionData.recommendations.map((recommendation, index) => (
+                      <div key={index} className="flex items-start gap-2 p-2 bg-yellow-50 rounded-md">
+                        <AlertTriangle className="h-4 w-4 text-yellow-500 mt-0.5" />
+                        <p className="text-sm text-gray-700">{recommendation}</p>
+                      </div>
+                    ))}
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium">Weather Forecast</h3>
-                  <div className="flex justify-between items-center p-2 bg-gray-50 rounded-md">
-                    <div>
-                      <p className="text-sm">Today</p>
-                      <p className="text-xs text-gray-500">Sunny</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium">32°C</p>
-                      <p className="text-xs text-gray-500">10% rain</p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </CardContent>
           </Card>

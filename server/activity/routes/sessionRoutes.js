@@ -62,7 +62,7 @@ router.patch(
     
   ],
   validateFarmingMetrics,
-  validateSessionDuration,
+  //validateSessionDuration,
   sessionController.endSession
 );
 
